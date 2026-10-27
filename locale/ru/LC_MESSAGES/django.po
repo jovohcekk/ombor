@@ -1,0 +1,662 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Ombor Inventory\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+
+msgid "%(count)s product is low on stock."
+msgid_plural "%(count)s products are low on stock."
+msgstr[0] "Мало товара на складе: %(count)s позиция."
+msgstr[1] "Мало товара на складе: %(count)s позиции."
+msgstr[2] "Мало товара на складе: %(count)s позиций."
+
+msgid "%(title)s recorded successfully."
+msgstr "%(title)s успешно зарегистрировано."
+
+msgid "A clear view of your stock and recent activity."
+msgstr "Обзор складских запасов и последних операций."
+
+msgid "Account"
+msgstr "Аккаунт"
+
+msgid "Activate"
+msgstr "Активировать"
+
+msgid "Active"
+msgstr "Активен"
+
+msgid "Active filter"
+msgstr "Фильтр активности"
+
+msgid "Add Category"
+msgstr "Добавить категорию"
+
+msgid "Add Product"
+msgstr "Добавить товар"
+
+msgid "Add User"
+msgstr "Добавить пользователя"
+
+msgid "Add product"
+msgstr "Добавить товар"
+
+msgid "Adjustment"
+msgstr "Корректировка"
+
+msgid "All categories"
+msgstr "Все категории"
+
+msgid "All products"
+msgstr "Все товары"
+
+msgid "All stock levels OK"
+msgstr "Все остатки в норме"
+
+msgid "All types"
+msgstr "Все типы"
+
+msgid "Already have an account?"
+msgstr "Уже есть аккаунт?"
+
+msgid "An account with this username or email already exists. Please choose different details."
+msgstr "Аккаунт с таким именем пользователя или адресом электронной почты уже существует. Укажите другие данные."
+
+msgid "Appearance"
+msgstr "Внешний вид"
+
+msgid "Apply"
+msgstr "Применить"
+
+msgid "Back to dashboard"
+msgstr "Вернуться к панели управления"
+
+msgid "Cancel"
+msgstr "Отмена"
+
+msgid "Cannot delete this category because %(count)s product uses it."
+msgid_plural "Cannot delete this category because %(count)s products use it."
+msgstr[0] "Нельзя удалить категорию: она используется в %(count)s товаре."
+msgstr[1] "Нельзя удалить категорию: она используется в %(count)s товарах."
+msgstr[2] "Нельзя удалить категорию: она используется в %(count)s товарах."
+
+msgid "Categories"
+msgstr "Категории"
+
+msgid "Category"
+msgstr "Категория"
+
+msgid "Category created."
+msgstr "Категория создана."
+
+msgid "Category deleted."
+msgstr "Категория удалена."
+
+msgid "Category distribution"
+msgstr "Распределение по категориям"
+
+msgid "Category distribution chart"
+msgstr "Диаграмма распределения по категориям"
+
+msgid "Category name cannot be empty."
+msgstr "Название категории не может быть пустым."
+
+msgid "Category updated."
+msgstr "Категория обновлена."
+
+msgid "Change language"
+msgstr "Изменить язык"
+
+msgid "Cannot delete a category that contains products."
+msgstr "Нельзя удалить категорию, в которой есть товары."
+
+msgid "Cannot delete a product with stock movement history."
+msgstr "Нельзя удалить товар с историей складских операций."
+
+msgid "Choose language"
+msgstr "Выберите язык"
+
+msgid "Close"
+msgstr "Закрыть"
+
+msgid "Close navigation menu"
+msgstr "Закрыть меню навигации"
+
+msgid "Confirm password"
+msgstr "Подтвердите пароль"
+
+msgid "Create account"
+msgstr "Создать аккаунт"
+
+msgid "Create one"
+msgstr "Создать аккаунт"
+
+msgid "Create your account"
+msgstr "Создайте аккаунт"
+
+msgid "Current Inventory"
+msgstr "Текущие запасы"
+
+msgid "Dashboard"
+msgstr "Панель управления"
+
+msgid "Date"
+msgstr "Дата"
+
+msgid "Deactivate"
+msgstr "Деактивировать"
+
+msgid "Delete"
+msgstr "Удалить"
+
+msgid "Delete Category"
+msgstr "Удалить категорию"
+
+msgid "Delete Product"
+msgstr "Удалить товар"
+
+msgid "Delete %(category_name)s?"
+msgstr "Удалить категорию «%(category_name)s»?"
+
+msgid "Delete %(product_name)s?"
+msgstr "Удалить товар «%(product_name)s»?"
+
+msgid "Description"
+msgstr "Описание"
+
+msgid "Don't have an account?"
+msgstr "Нет аккаунта?"
+
+msgid "Edit"
+msgstr "Изменить"
+
+msgid "Edit Category"
+msgstr "Изменить категорию"
+
+msgid "Edit Product"
+msgstr "Изменить товар"
+
+msgid "Edit User"
+msgstr "Изменить пользователя"
+
+msgid "Email"
+msgstr "Электронная почта"
+
+msgid "Error"
+msgstr "Ошибка"
+
+msgid "Export CSV"
+msgstr "Экспорт CSV"
+
+msgid "Filter"
+msgstr "Фильтр"
+
+msgid "Filter by date, then export CSV. PDF export is available as a service hook."
+msgstr "Отфильтруйте данные по дате и экспортируйте CSV. Экспорт PDF доступен через подключаемый сервис."
+
+msgid "First name"
+msgstr "Имя"
+
+msgid "From"
+msgstr "С"
+
+msgid "INVENTORY MANAGEMENT"
+msgstr "УПРАВЛЕНИЕ СКЛАДОМ"
+
+msgid "INVENTORY OS"
+msgstr "СКЛАДСКАЯ СИСТЕМА"
+
+msgid "INVENTORY OVERVIEW"
+msgstr "ОБЗОР СКЛАДА"
+
+msgid "If this product has stock history, it will be deactivated instead of permanently deleted."
+msgstr "Если у товара есть история складских операций, он будет деактивирован, а не удалён."
+
+msgid "Image"
+msgstr "Изображение"
+
+msgid "Inactive"
+msgstr "Неактивен"
+
+msgid "Initial stock"
+msgstr "Начальный остаток"
+
+msgid "Insufficient stock"
+msgstr "Недостаточно товара на складе"
+
+msgid "Invalid movement type."
+msgstr "Неверный тип операции."
+
+msgid "Inventory"
+msgstr "Склад"
+
+msgid "Inventory Value"
+msgstr "Стоимость запасов"
+
+msgid "Issue inventory. Quantity cannot exceed available stock."
+msgstr "Оформите выдачу товара. Количество не может превышать остаток."
+
+msgid "Last name"
+msgstr "Фамилия"
+
+msgid "Leave blank to keep current password."
+msgstr "Оставьте поле пустым, чтобы сохранить текущий пароль."
+
+msgid "Login"
+msgstr "Вход"
+
+msgid "Logout"
+msgstr "Выйти"
+
+msgid "Low Stock"
+msgstr "Малый остаток"
+
+msgid "Low Stock Products"
+msgstr "Товары с низким остатком"
+
+msgid "Low stock"
+msgstr "Низкий остаток"
+
+msgid "Main menu"
+msgstr "Главное меню"
+
+msgid "Main navigation"
+msgstr "Основная навигация"
+
+msgid "Manager"
+msgstr "Менеджер"
+
+msgid "Min"
+msgstr "Мин."
+
+msgid "Min Stock"
+msgstr "Минимальный остаток"
+
+msgid "Min stock"
+msgstr "Мин. остаток"
+
+msgid "Minimum stock"
+msgstr "Минимальный остаток"
+
+msgid "Name"
+msgstr "Название"
+
+msgid "Name or SKU"
+msgstr "Название или SKU"
+
+msgid "Next"
+msgstr "Следующая"
+
+msgid "No categories"
+msgstr "Категорий нет"
+
+msgid "No data"
+msgstr "Нет данных"
+
+msgid "No movements"
+msgstr "Операций нет"
+
+msgid "No movements yet"
+msgstr "Операций пока нет"
+
+msgid "No products found"
+msgstr "Товары не найдены"
+
+msgid "No records"
+msgstr "Записей нет"
+
+msgid "No stock alerts"
+msgstr "Нет предупреждений об остатках"
+
+msgid "Note"
+msgstr "Примечание"
+
+msgid "Notifications"
+msgstr "Уведомления"
+
+msgid "OK"
+msgstr "В норме"
+
+msgid "On hand"
+msgstr "В наличии"
+
+msgid "Only used when creating a new product."
+msgstr "Используется только при создании нового товара."
+
+msgid "Open navigation menu"
+msgstr "Открыть меню навигации"
+
+msgid "PDF (architecture)"
+msgstr "PDF (архитектура)"
+
+msgid "PDF export is not enabled in this deployment. Use CSV export, or install WeasyPrint/ReportLab and implement apps.reports.pdf.render_report_pdf."
+msgstr "Экспорт PDF не включён в этом окружении. Используйте экспорт CSV либо установите WeasyPrint/ReportLab и реализуйте apps.reports.pdf.render_report_pdf."
+
+msgid "Page %(number)s of %(total)s"
+msgstr "Страница %(number)s из %(total)s"
+
+msgid "Password"
+msgstr "Пароль"
+
+msgid "Enter a valid username. This value may contain only letters, numbers, and @/./+/-/_ characters."
+msgstr "Недопустимое имя пользователя. Используйте только буквы, цифры и символы @/./+/-/_."
+
+msgid "Please enter a correct %(username)s and password. Note that both fields may be case-sensitive."
+msgstr "Введите правильные данные: %(username)s и пароль. В обоих полях учитывается регистр букв."
+
+msgid "This account is inactive."
+msgstr "Этот аккаунт неактивен."
+
+msgid "The two password fields didn’t match."
+msgstr "Введённые пароли не совпадают."
+
+msgid "The password is too similar to the %(verbose_name)s."
+msgstr "Пароль слишком похож на поле «%(verbose_name)s»."
+
+msgid "Your password can’t be too similar to your other personal information."
+msgstr "Пароль не должен быть слишком похож на другие ваши личные данные."
+
+msgid "This password is too short. It must contain at least %d character."
+msgid_plural "This password is too short. It must contain at least %d characters."
+msgstr[0] "Пароль слишком короткий. В нём должно быть не менее %d символа."
+msgstr[1] "Пароль слишком короткий. В нём должно быть не менее %d символа."
+msgstr[2] "Пароль слишком короткий. В нём должно быть не менее %d символов."
+
+msgid "Your password must contain at least %(min_length)d character."
+msgid_plural "Your password must contain at least %(min_length)d characters."
+msgstr[0] "Пароль должен содержать не менее %(min_length)d символа."
+msgstr[1] "Пароль должен содержать не менее %(min_length)d символа."
+msgstr[2] "Пароль должен содержать не менее %(min_length)d символов."
+
+msgid "This password is too common."
+msgstr "Введённый пароль слишком широко распространён."
+
+msgid "Your password can’t be a commonly used password."
+msgstr "Пароль не должен быть слишком простым и распространённым."
+
+msgid "This password is entirely numeric."
+msgstr "Введённый пароль состоит только из цифр."
+
+msgid "Your password can’t be entirely numeric."
+msgstr "Пароль не может состоять только из цифр."
+
+msgid "Pagination"
+msgstr "Страницы"
+
+msgid "Posted"
+msgstr "Проведено"
+
+msgid "Previous"
+msgstr "Предыдущая"
+
+msgid "Price cannot be negative."
+msgstr "Цена не может быть отрицательной."
+
+msgid "Product"
+msgstr "Товар"
+
+msgid "Product created."
+msgstr "Товар создан."
+
+msgid "Product deleted."
+msgstr "Товар удалён."
+
+msgid "Product has stock history and cannot be deleted. It was deactivated instead."
+msgstr "У товара есть история складских операций, поэтому удалить его нельзя. Товар деактивирован."
+
+msgid "Product name cannot be empty."
+msgstr "Название товара не может быть пустым."
+
+msgid "Product statistics"
+msgstr "Статистика товаров"
+
+msgid "Product statistics chart"
+msgstr "Диаграмма статистики товаров"
+
+msgid "Product updated."
+msgstr "Товар обновлён."
+
+msgid "Products"
+msgstr "Товары"
+
+msgid "Profile & settings"
+msgstr "Профиль и настройки"
+
+msgid "Purchase"
+msgstr "Закупка"
+
+msgid "Purchase / Selling"
+msgstr "Закупка / Продажа"
+
+msgid "Purchase Price"
+msgstr "Закупочная цена"
+
+msgid "Purchase price"
+msgstr "Закупочная цена"
+
+msgid "Qty"
+msgstr "Кол-во"
+
+msgid "Quantity"
+msgstr "Количество"
+
+msgid "Quantity cannot be negative."
+msgstr "Количество не может быть отрицательным."
+
+msgid "Quantity must be at least 1."
+msgstr "Количество должно быть не меньше 1."
+
+msgid "Receive inventory into the warehouse."
+msgstr "Оформите поступление товара на склад."
+
+msgid "Recent Stock Movements"
+msgstr "Последние складские операции"
+
+msgid "Recent movements"
+msgstr "Последние операции"
+
+msgid "Record Stock In"
+msgstr "Записать поступление"
+
+msgid "Record Stock Out"
+msgstr "Записать выдачу"
+
+msgid "Record stock"
+msgstr "Записать движение"
+
+msgid "Remember me"
+msgstr "Запомнить меня"
+
+msgid "Report"
+msgstr "Отчёт"
+
+msgid "Reports"
+msgstr "Отчёты"
+
+msgid "Role"
+msgstr "Роль"
+
+msgid "Run"
+msgstr "Сформировать"
+
+msgid "SKU"
+msgstr "Артикул"
+
+msgid "SKU must be unique."
+msgstr "Артикул SKU должен быть уникальным."
+
+msgid "Save"
+msgstr "Сохранить"
+
+msgid "Save Adjustment"
+msgstr "Сохранить корректировку"
+
+msgid "Search products or SKU"
+msgstr "Поиск товаров или SKU"
+
+msgid "Search products or SKU..."
+msgstr "Поиск товаров или SKU..."
+
+msgid "Selling"
+msgstr "Продажа"
+
+msgid "Selling price"
+msgstr "Цена продажи"
+
+msgid "Set the on-hand quantity to a counted value."
+msgstr "Укажите фактическое количество товара."
+
+msgid "Set up your access to the Ombor workspace"
+msgstr "Настройте доступ к рабочему пространству Ombor"
+
+msgid "Settings"
+msgstr "Настройки"
+
+msgid "Sign in"
+msgstr "Войти"
+
+msgid "Sign in to your Ombor workspace"
+msgstr "Войдите в рабочее пространство Ombor"
+
+msgid "Something went wrong on our side."
+msgstr "На нашей стороне произошла ошибка."
+
+msgid "Staff"
+msgstr "Сотрудник"
+
+msgid "Status"
+msgstr "Статус"
+
+msgid "Stock Adjustment"
+msgstr "Корректировка остатков"
+
+msgid "Stock History"
+msgstr "История остатков"
+
+msgid "Stock movement chart"
+msgstr "Диаграмма складских операций"
+
+msgid "Stock IN / OUT (14 days)"
+msgstr "Поступления / выдачи за 14 дней"
+
+msgid "Stock In"
+msgstr "Поступление"
+
+msgid "Stock Out"
+msgstr "Выдача"
+
+msgid "Stock status"
+msgstr "Состояние остатка"
+
+msgid "Super Admin"
+msgstr "Суперадминистратор"
+
+msgid "The page you requested was not found."
+msgstr "Запрошенная страница не найдена."
+
+msgid "The request could not be understood."
+msgstr "Не удалось обработать запрос."
+
+msgid "Theme is stored in this browser only."
+msgstr "Тема сохраняется только в этом браузере."
+
+msgid "This action cannot be undone."
+msgstr "Это действие нельзя отменить."
+
+msgid "This email address is already registered."
+msgstr "Этот адрес электронной почты уже зарегистрирован."
+
+msgid "This username is already registered."
+msgstr "Это имя пользователя уже зарегистрировано."
+
+msgid "To"
+msgstr "По"
+
+msgid "Today IN / OUT"
+msgstr "Поступления / выдачи сегодня"
+
+msgid "Toggle dark / light"
+msgstr "Переключить тёмную / светлую тему"
+
+msgid "Total"
+msgstr "Итого"
+
+msgid "Total Products"
+msgstr "Всего товаров"
+
+msgid "Total Stock"
+msgstr "Всего на складе"
+
+msgid "Type"
+msgstr "Тип"
+
+msgid "Unit"
+msgstr "Ед."
+
+msgid "Unit price"
+msgstr "Цена за единицу"
+
+msgid "Unknown report"
+msgstr "Неизвестный отчёт"
+
+msgid "User"
+msgstr "Пользователь"
+
+msgid "User activated."
+msgstr "Пользователь активирован."
+
+msgid "User created."
+msgstr "Пользователь создан."
+
+msgid "User deactivated."
+msgstr "Пользователь деактивирован."
+
+msgid "User updated."
+msgstr "Пользователь обновлён."
+
+msgid "Username"
+msgstr "Имя пользователя"
+
+msgid "Username or Email"
+msgstr "Имя пользователя или электронная почта"
+
+msgid "Username or email"
+msgstr "Имя пользователя или электронная почта"
+
+msgid "Users"
+msgstr "Пользователи"
+
+msgid "Value"
+msgstr "Стоимость"
+
+msgid "View"
+msgstr "Просмотр"
+
+msgid "View all"
+msgstr "Показать все"
+
+msgid "Welcome back"
+msgstr "С возвращением"
+
+msgid "Welcome back!"
+msgstr "С возвращением!"
+
+msgid "You cannot deactivate your own account."
+msgstr "Нельзя деактивировать собственный аккаунт."
+
+msgid "You do not have permission to access this page."
+msgstr "У вас нет доступа к этой странице."
+
+msgid "You do not have permission to view this page."
+msgstr "У вас нет разрешения просматривать эту страницу."
+
+msgid "You have been logged out."
+msgstr "Вы вышли из системы."
+
+msgid "Your account has been created."
+msgstr "Ваш аккаунт создан."
+
+msgid "%(count)s product(s) are linked to this category. Remove or reassign them before deleting."
+msgstr "К этой категории привязано товаров: %(count)s. Удалите их или переназначьте категорию перед удалением."

@@ -1,0 +1,31 @@
+services:
+  - type: web
+    name: ombor-inventory
+    runtime: python
+    plan: free
+    buildCommand: "./build.sh"
+    startCommand: gunicorn config.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 60
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.3"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: ombor-db
+          property: connectionString
+      - key: ALLOWED_HOSTS
+        sync: false
+      - key: CSRF_TRUSTED_ORIGINS
+        sync: false
+      - key: SECURE_SSL_REDIRECT
+        value: "True"
+    autoDeploy: true
+
+databases:
+  - name: ombor-db
+    plan: free
+    databaseName: ombor
+    user: ombor

@@ -1,0 +1,77 @@
+{% extends "dashboard/layout.html" %}
+{% load i18n l10n %}
+{% block title %}{% translate "Products" %}{% endblock %}
+{% block content %}
+<div class="page-header d-flex flex-wrap justify-content-between align-items-center gap-2">
+  <div>
+    <h1 class="page-title">{% translate "Products" %}</h1>
+  </div>
+  {% if can_manage_products %}
+  <a href="{% url 'dashboard:product_create' %}" class="btn btn-primary">{% translate "Add Product" %}</a>
+  {% endif %}
+</div>
+<form class="card panel-card p-3 mb-3" method="get">
+  <div class="row g-2">
+    <div class="col-md-3"><input type="search" name="q" class="form-control" placeholder="{% translate 'Name or SKU' %}" aria-label="{% translate 'Search products or SKU' %}" value="{{ filters.q }}"></div>
+    <div class="col-md-2">
+      <select name="category" class="form-select">
+        <option value="">{% translate "All categories" %}</option>
+        {% for c in categories %}<option value="{{ c.id }}" {% if filters.category == c.id|stringformat:"s" %}selected{% endif %}>{{ c.name }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="col-md-2">
+      <select name="stock" class="form-select">
+        <option value="">{% translate "Stock status" %}</option>
+        <option value="low" {% if filters.stock == 'low' %}selected{% endif %}>{% translate "Low stock" %}</option>
+        <option value="ok" {% if filters.stock == 'ok' %}selected{% endif %}>{% translate "OK" %}</option>
+      </select>
+    </div>
+    <div class="col-md-2">
+      <select name="active" class="form-select">
+        <option value="">{% translate "Active filter" %}</option>
+        <option value="1" {% if filters.active == '1' %}selected{% endif %}>{% translate "Active" %}</option>
+        <option value="0" {% if filters.active == '0' %}selected{% endif %}>{% translate "Inactive" %}</option>
+      </select>
+    </div>
+    <div class="col-md-2"><button class="btn btn-outline-primary w-100">{% translate "Filter" %}</button></div>
+  </div>
+</form>
+<div class="card panel-card">
+  <div class="table-responsive">
+    <table class="table table-hover align-middle mb-0">
+      <thead>
+        <tr>
+          <th></th><th>{% translate "Product" %}</th><th>SKU</th><th>{% translate "Category" %}</th>
+          <th>{% translate "Purchase" %}</th><th>{% translate "Selling" %}</th><th>{% translate "Qty" %}</th><th>{% translate "Status" %}</th><th></th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for p in page_obj %}
+        <tr>
+          <td>{% if p.image %}<img src="{{ p.image.url }}" alt="" class="product-thumb" width="40" height="40" loading="lazy">{% else %}<span class="product-thumb placeholder" aria-hidden="true"></span>{% endif %}</td>
+          <td>{{ p.name }}</td>
+          <td><code>{{ p.sku }}</code></td>
+          <td>{{ p.category.name }}</td>
+          <td>{{ p.purchase_price|localize }}</td>
+          <td>{{ p.selling_price|localize }}</td>
+          <td class="{% if p.is_low_stock %}text-danger fw-semibold{% endif %}">{{ p.quantity|localize }}</td>
+          <td>{% if p.is_active %}<span class="badge bg-success-subtle text-success">{% translate "Active" %}</span>{% else %}<span class="badge bg-secondary">{% translate "Inactive" %}</span>{% endif %}</td>
+          <td class="text-end">
+            <a href="{% url 'dashboard:product_detail' p.pk %}" class="btn btn-sm btn-outline-secondary">{% translate "View" %}</a>
+            {% if can_manage_products %}
+            <a href="{% url 'dashboard:product_edit' p.pk %}" class="btn btn-sm btn-outline-primary">{% translate "Edit" %}</a>
+            <a href="{% url 'dashboard:product_delete' p.pk %}" class="btn btn-sm btn-outline-danger">{% translate "Delete" %}</a>
+            {% endif %}
+          </td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="9" class="text-center text-muted py-4">{% translate "No products found" %}</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% if page_obj.has_other_pages %}
+  <div class="card-footer">{% include "partials/pagination.html" with page_obj=page_obj %}</div>
+  {% endif %}
+</div>
+{% endblock %}

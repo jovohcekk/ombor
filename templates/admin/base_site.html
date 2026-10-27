@@ -1,0 +1,38 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}{{ title }} | Ombor Admin{% endblock %}
+
+{% block dark-mode-vars %}
+{% if has_permission %}{{ block.super }}{% endif %}
+{% endblock %}
+
+{% block branding %}
+<div class="admin-branding">
+  <h1 id="site-name"><a href="{% url 'admin:index' %}">Ombor <span>Admin</span></a></h1>
+  {% if has_permission %}
+    {% include "admin/color_theme_toggle.html" %}
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+{% if has_permission %}
+<script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("theme");
+      document.documentElement.dataset.theme =
+        theme === "light" || theme === "dark" ? theme : "auto";
+    } catch (error) {
+      document.documentElement.dataset.theme = "auto";
+    }
+  })();
+</script>
+<link rel="stylesheet" href="{% static 'css/admin.css' %}">
+<script src="{% static 'js/admin-theme.js' %}" defer></script>
+{% else %}
+<link rel="stylesheet" href="{% static 'css/admin-login.css' %}">
+{% endif %}
+{% endblock %}

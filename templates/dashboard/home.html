@@ -1,0 +1,150 @@
+{% extends "dashboard/layout.html" %}
+{% load i18n l10n %}
+{% block title %}{% translate "Dashboard" %}{% endblock %}
+{% block content %}
+<div class="page-header dashboard-heading">
+  <div>
+    <span class="eyebrow"><span class="eyebrow-dot"></span> {% translate "INVENTORY OVERVIEW" %}</span>
+    <h1 class="page-title">{% translate "Dashboard" %}</h1>
+    <p class="text-muted mb-0">{% translate "A clear view of your stock and recent activity." %}</p>
+  </div>
+  <div class="dashboard-actions">
+    {% if can_manage_stock %}<a href="{% url 'dashboard:stock_in' %}" class="btn btn-primary"><i class="bi bi-plus-lg"></i> {% translate "Record stock" %}</a>{% endif %}
+    {% if can_manage_products %}<a href="{% url 'dashboard:product_create' %}" class="btn btn-outline-primary"><i class="bi bi-box-seam"></i> {% translate "Add product" %}</a>{% endif %}
+  </div>
+</div>
+<div class="row g-3 mb-4">
+  <div class="col-6 col-xl">
+    <div class="stat-card stat-products">
+      <span class="stat-icon"><i class="bi bi-box-seam"></i></span>
+      <span class="stat-label">{% translate "Total Products" %}</span>
+      <span class="stat-value">{{ stats.total_products|localize }}</span>
+    </div>
+  </div>
+  <div class="col-6 col-xl">
+    <div class="stat-card stat-categories">
+      <span class="stat-icon"><i class="bi bi-grid"></i></span>
+      <span class="stat-label">{% translate "Categories" %}</span>
+      <span class="stat-value">{{ stats.total_categories|localize }}</span>
+    </div>
+  </div>
+  <div class="col-6 col-xl">
+    <div class="stat-card stat-stock">
+      <span class="stat-icon"><i class="bi bi-stack"></i></span>
+      <span class="stat-label">{% translate "Total Stock" %}</span>
+      <span class="stat-value">{{ stats.total_stock|localize }}</span>
+    </div>
+  </div>
+  <div class="col-6 col-xl">
+    <div class="stat-card stat-warning">
+      <span class="stat-icon"><i class="bi bi-exclamation-triangle"></i></span>
+      <span class="stat-label">{% translate "Low Stock" %}</span>
+      <span class="stat-value">{{ stats.low_stock|localize }}</span>
+    </div>
+  </div>
+  <div class="col-6 col-xl">
+    <div class="stat-card stat-value-card">
+      <span class="stat-icon"><i class="bi bi-wallet2"></i></span>
+      <span class="stat-label">{% translate "Inventory Value" %}</span>
+      <span class="stat-value">{{ stats.inventory_value|localize }}</span>
+    </div>
+  </div>
+  <div class="col-6 col-xl">
+    <div class="stat-card stat-movement">
+      <span class="stat-icon"><i class="bi bi-arrow-left-right"></i></span>
+      <span class="stat-label">{% translate "Today IN / OUT" %}</span>
+      <span class="stat-value">{{ stats.today_in|localize }} / {{ stats.today_out|localize }}</span>
+    </div>
+  </div>
+</div>
+<div class="row g-4 mb-4">
+  <div class="col-lg-8">
+    <div class="card panel-card">
+      <div class="card-header">{% translate "Stock IN / OUT (14 days)" %}</div>
+      <div class="card-body">
+        <canvas id="stockChart" height="120" role="img" aria-label="{% translate 'Stock movement chart' %}"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="card panel-card mb-4">
+      <div class="card-header">{% translate "Category distribution" %}</div>
+      <div class="card-body">
+        <canvas id="categoryChart" height="160" role="img" aria-label="{% translate 'Category distribution chart' %}"></canvas>
+      </div>
+    </div>
+    <div class="card panel-card">
+      <div class="card-header">{% translate "Product statistics" %}</div>
+      <div class="card-body">
+        <canvas id="productChart" height="140" role="img" aria-label="{% translate 'Product statistics chart' %}"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row g-4">
+  <div class="col-lg-7">
+    <div class="card panel-card">
+      <div class="card-header d-flex justify-content-between">
+        <span>{% translate "Recent Stock Movements" %}</span>
+        <a href="{% url 'dashboard:stock_history' %}">{% translate "View all" %}</a>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-hover mb-0 align-middle">
+          <thead>
+            <tr>
+              <th>{% translate "Product" %}</th>
+              <th>{% translate "Type" %}</th>
+              <th>{% translate "Qty" %}</th>
+              <th>{% translate "User" %}</th>
+              <th>{% translate "Date" %}</th>
+              <th>{% translate "Status" %}</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for m in recent_movements %}
+          <tr>
+            <td>{{ m.product.name }}</td>
+            <td><span class="badge movement-{{ m.movement_type }}">{{ m.get_movement_type_display }}</span></td>
+            <td>{{ m.quantity|localize }}</td>
+            <td>{{ m.created_by.username|default:"—" }}</td>
+            <td>{{ m.created_at|date:"DATETIME_FORMAT" }}</td>
+            <td><span class="badge bg-success-subtle text-success">{% translate "Posted" %}</span></td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="6" class="text-muted text-center">{% translate "No movements yet" %}</td></tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-5">
+    <div class="card panel-card border-warning-subtle">
+      <div class="card-header text-warning">{% translate "Low Stock Products" %}</div>
+      <div class="table-responsive">
+        <table class="table mb-0">
+          <thead><tr><th>{% translate "Product" %}</th><th>{% translate "Qty" %}</th><th>{% translate "Min" %}</th></tr></thead>
+          <tbody>
+          {% for p in low_stock_products %}
+          <tr>
+            <td><a href="{% url 'dashboard:product_detail' p.pk %}">{{ p.name }}</a></td>
+            <td class="text-danger fw-semibold">{{ p.quantity|localize }}</td>
+            <td>{{ p.minimum_stock|localize }}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="3" class="text-muted text-center">{% translate "All stock levels OK" %}</td></tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+  const chartData = {{ chart_json|safe }};
+  window.initDashboardCharts(chartData);
+</script>
+{% endblock %}

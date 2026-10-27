@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block body %}
+<div class="app-shell">
+  <div class="sidebar-backdrop" id="sidebarBackdrop" aria-hidden="true"></div>
+  <aside class="sidebar" id="sidebar" aria-label="{% translate 'Main navigation' %}">
+    <a class="sidebar-brand text-decoration-none" href="{% url 'dashboard:home' %}">
+      <span class="brand-mark">O</span>
+      <span class="brand-lockup"><span class="brand-text">Ombor</span><span class="brand-caption">{% translate "INVENTORY OS" %}</span></span>
+    </a>
+    <nav class="sidebar-nav" aria-label="{% translate 'Main menu' %}">
+      <a href="{% url 'dashboard:home' %}" class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}">
+        <i class="bi bi-grid-1x2"></i> {% translate "Dashboard" %}
+      </a>
+      {% if can_manage_products or current_user_role == 'staff' %}
+      <a href="{% url 'dashboard:product_list' %}" class="nav-link {% if 'product' in request.resolver_match.url_name %}active{% endif %}">
+        <i class="bi bi-box-seam"></i> {% translate "Products" %}
+      </a>
+      {% endif %}
+      {% if can_manage_products %}
+      <a href="{% url 'dashboard:category_list' %}" class="nav-link {% if 'category' in request.resolver_match.url_name %}active{% endif %}">
+        <i class="bi bi-tags"></i> {% translate "Categories" %}
+      </a>
+      {% endif %}
+      {% if can_manage_stock %}
+      <a href="{% url 'dashboard:stock_in' %}" class="nav-link {% if request.resolver_match.url_name == 'stock_in' %}active{% endif %}">
+        <i class="bi bi-box-arrow-in-down"></i> {% translate "Stock In" %}
+      </a>
+      <a href="{% url 'dashboard:stock_out' %}" class="nav-link {% if request.resolver_match.url_name == 'stock_out' %}active{% endif %}">
+        <i class="bi bi-box-arrow-up"></i> {% translate "Stock Out" %}
+      </a>
+      {% if can_manage_products %}
+      <a href="{% url 'dashboard:stock_adjust' %}" class="nav-link {% if request.resolver_match.url_name == 'stock_adjust' %}active{% endif %}">
+        <i class="bi bi-sliders"></i> {% translate "Adjustment" %}
+      </a>
+      {% endif %}
+      <a href="{% url 'dashboard:stock_history' %}" class="nav-link {% if request.resolver_match.url_name == 'stock_history' %}active{% endif %}">
+        <i class="bi bi-clock-history"></i> {% translate "Stock History" %}
+      </a>
+      {% endif %}
+      {% if can_view_reports %}
+      <a href="{% url 'reports:home' %}" class="nav-link {% if request.resolver_match.namespace == 'reports' %}active{% endif %}">
+        <i class="bi bi-graph-up"></i> {% translate "Reports" %}
+      </a>
+      {% endif %}
+      {% if can_manage_users %}
+      <a href="{% url 'dashboard:user_list' %}" class="nav-link {% if 'user' in request.resolver_match.url_name %}active{% endif %}">
+        <i class="bi bi-people"></i> {% translate "Users" %}
+      </a>
+      {% endif %}
+      <a href="{% url 'dashboard:settings' %}" class="nav-link {% if request.resolver_match.url_name == 'settings' %}active{% endif %}">
+        <i class="bi bi-gear"></i> {% translate "Settings" %}
+      </a>
+      <form method="post" action="{% url 'logout' %}" class="sidebar-logout">
+        {% csrf_token %}
+        <button type="submit" class="nav-link text-danger w-100 text-start border-0 bg-transparent">
+          <i class="bi bi-box-arrow-left"></i> {% translate "Logout" %}
+        </button>
+      </form>
+    </nav>
+  </aside>
+  <div class="main-wrap">
+    <header class="topbar">
+      <button type="button" class="btn btn-light sidebar-toggle d-lg-none" id="sidebarToggle" aria-label="{% translate 'Open navigation menu' %}" aria-controls="sidebar" aria-expanded="false">
+        <i class="bi bi-list"></i>
+      </button>
+      <form class="topbar-search d-none d-md-flex" method="get" action="{% url 'dashboard:product_list' %}">
+        <i class="bi bi-search"></i>
+        <input type="search" name="q" class="form-control" aria-label="{% translate 'Search products or SKU' %}" placeholder="{% translate 'Search products or SKU...' %}" value="{{ request.GET.q }}">
+      </form>
+      <div class="topbar-end ms-auto d-flex align-items-center gap-3">
+        <div class="dropdown">
+          <button class="btn btn-light position-relative icon-button" data-bs-toggle="dropdown" aria-label="{% translate 'Notifications' %}" aria-expanded="false">
+            <i class="bi bi-bell"></i>
+            {% if low_stock_count %}
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">{{ low_stock_count }}</span>
+            {% endif %}
+          </button>
+          <div class="dropdown-menu dropdown-menu-end notify-menu">
+            {% if low_stock_count %}
+            <a class="dropdown-item" href="{% url 'dashboard:product_list' %}?stock=low">{% blocktranslate count count=low_stock_count %}{{ count }} product is low on stock.{% plural %}{{ count }} products are low on stock.{% endblocktranslate %}</a>
+            {% else %}
+            <span class="dropdown-item-text text-muted">{% translate "No stock alerts" %}</span>
+            {% endif %}
+          </div>
+        </div>
+        <span class="badge role-badge">{{ user.get_role_display|default:user.role }}</span>
+        <div class="dropdown">
+          <button class="btn btn-sm btn-outline-secondary dropdown-toggle account-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-person-circle"></i>
+            {{ user.get_full_name|default:user.username }}
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="{% url 'dashboard:settings' %}">{% translate "Profile & settings" %}</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+              <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="dropdown-item text-danger">{% translate "Logout" %}</button>
+              </form>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </header>
+    <main class="content-area" id="mainContent" tabindex="-1">
+      {% if messages %}
+      <div class="messages-wrap">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="{% translate 'Close' %}"></button>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+</div>
+{{ javascript_translations|json_script:"javascript-translations" }}
+{% endblock %}

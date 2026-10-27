@@ -1,0 +1,658 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Ombor Inventory\n"
+"Language: uz\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "%(count)s product is low on stock."
+msgid_plural "%(count)s products are low on stock."
+msgstr[0] "%(count)s ta mahsulot zaxirasi kam."
+msgstr[1] "%(count)s ta mahsulot zaxirasi kam."
+
+msgid "%(title)s recorded successfully."
+msgstr "%(title)s muvaffaqiyatli qayd etildi."
+
+msgid "A clear view of your stock and recent activity."
+msgstr "Omboringizdagi zaxira va so‘nggi faoliyat haqida umumiy ma’lumot."
+
+msgid "Account"
+msgstr "Hisob"
+
+msgid "Activate"
+msgstr "Faollashtirish"
+
+msgid "Active"
+msgstr "Faol"
+
+msgid "Active filter"
+msgstr "Faollik holati"
+
+msgid "Add Category"
+msgstr "Kategoriya qo‘shish"
+
+msgid "Add Product"
+msgstr "Mahsulot qo‘shish"
+
+msgid "Add User"
+msgstr "Foydalanuvchi qo‘shish"
+
+msgid "Add product"
+msgstr "Mahsulot qo‘shish"
+
+msgid "Adjustment"
+msgstr "Tuzatish"
+
+msgid "All categories"
+msgstr "Barcha kategoriyalar"
+
+msgid "All products"
+msgstr "Barcha mahsulotlar"
+
+msgid "All stock levels OK"
+msgstr "Barcha zaxira darajalari yaxshi"
+
+msgid "All types"
+msgstr "Barcha turlar"
+
+msgid "Already have an account?"
+msgstr "Hisobingiz bormi?"
+
+msgid "An account with this username or email already exists. Please choose different details."
+msgstr "Bu foydalanuvchi nomi yoki elektron pochta manzili bilan hisob allaqachon mavjud. Boshqa ma’lumot kiriting."
+
+msgid "Appearance"
+msgstr "Ko‘rinish"
+
+msgid "Apply"
+msgstr "Qo‘llash"
+
+msgid "Back to dashboard"
+msgstr "Boshqaruv paneliga qaytish"
+
+msgid "Cancel"
+msgstr "Bekor qilish"
+
+msgid "Cannot delete this category because %(count)s product uses it."
+msgid_plural "Cannot delete this category because %(count)s products use it."
+msgstr[0] "Bu kategoriya %(count)s ta mahsulotda ishlatilgani uchun uni o‘chirib bo‘lmaydi."
+msgstr[1] "Bu kategoriya %(count)s ta mahsulotda ishlatilgani uchun uni o‘chirib bo‘lmaydi."
+
+msgid "Categories"
+msgstr "Kategoriyalar"
+
+msgid "Category"
+msgstr "Kategoriya"
+
+msgid "Category created."
+msgstr "Kategoriya yaratildi."
+
+msgid "Category deleted."
+msgstr "Kategoriya o‘chirildi."
+
+msgid "Category distribution"
+msgstr "Kategoriyalar taqsimoti"
+
+msgid "Category distribution chart"
+msgstr "Kategoriyalar taqsimoti diagrammasi"
+
+msgid "Category name cannot be empty."
+msgstr "Kategoriya nomi bo‘sh bo‘lishi mumkin emas."
+
+msgid "Category updated."
+msgstr "Kategoriya yangilandi."
+
+msgid "Change language"
+msgstr "Tilni almashtirish"
+
+msgid "Cannot delete a category that contains products."
+msgstr "Mahsulotlari bor kategoriyani o‘chirib bo‘lmaydi."
+
+msgid "Cannot delete a product with stock movement history."
+msgstr "Zaxira harakatlari tarixi bor mahsulotni o‘chirib bo‘lmaydi."
+
+msgid "Choose language"
+msgstr "Tilni tanlang"
+
+msgid "Close"
+msgstr "Yopish"
+
+msgid "Close navigation menu"
+msgstr "Navigatsiya menyusini yopish"
+
+msgid "Confirm password"
+msgstr "Parolni tasdiqlang"
+
+msgid "Create account"
+msgstr "Hisob yaratish"
+
+msgid "Create one"
+msgstr "Hisob yaratish"
+
+msgid "Create your account"
+msgstr "Hisobingizni yarating"
+
+msgid "Current Inventory"
+msgstr "Joriy ombor zaxirasi"
+
+msgid "Dashboard"
+msgstr "Boshqaruv paneli"
+
+msgid "Date"
+msgstr "Sana"
+
+msgid "Deactivate"
+msgstr "Faolsizlantirish"
+
+msgid "Delete"
+msgstr "O‘chirish"
+
+msgid "Delete Category"
+msgstr "Kategoriyani o‘chirish"
+
+msgid "Delete Product"
+msgstr "Mahsulotni o‘chirish"
+
+msgid "Delete %(category_name)s?"
+msgstr "%(category_name)s kategoriyasi o‘chirilsinmi?"
+
+msgid "Delete %(product_name)s?"
+msgstr "%(product_name)s mahsuloti o‘chirilsinmi?"
+
+msgid "Description"
+msgstr "Tavsif"
+
+msgid "Don't have an account?"
+msgstr "Hisobingiz yo‘qmi?"
+
+msgid "Edit"
+msgstr "Tahrirlash"
+
+msgid "Edit Category"
+msgstr "Kategoriyani tahrirlash"
+
+msgid "Edit Product"
+msgstr "Mahsulotni tahrirlash"
+
+msgid "Edit User"
+msgstr "Foydalanuvchini tahrirlash"
+
+msgid "Email"
+msgstr "Elektron pochta"
+
+msgid "Error"
+msgstr "Xato"
+
+msgid "Export CSV"
+msgstr "CSV faylga eksport qilish"
+
+msgid "Filter"
+msgstr "Saralash"
+
+msgid "Filter by date, then export CSV. PDF export is available as a service hook."
+msgstr "Sana bo‘yicha saralang, so‘ng CSV faylga eksport qiling. PDF eksporti xizmat integratsiyasi orqali mavjud."
+
+msgid "First name"
+msgstr "Ism"
+
+msgid "From"
+msgstr "Dan"
+
+msgid "INVENTORY MANAGEMENT"
+msgstr "OMBOR BOSHQARUVI"
+
+msgid "INVENTORY OS"
+msgstr "OMBOR TIZIMI"
+
+msgid "INVENTORY OVERVIEW"
+msgstr "OMBOR UMUMIY KO‘RINISHI"
+
+msgid "If this product has stock history, it will be deactivated instead of permanently deleted."
+msgstr "Mahsulotning zaxira tarixi bo‘lsa, u butunlay o‘chirilmaydi, faolsizlantiriladi."
+
+msgid "Image"
+msgstr "Rasm"
+
+msgid "Inactive"
+msgstr "Faol emas"
+
+msgid "Initial stock"
+msgstr "Boshlang‘ich zaxira"
+
+msgid "Insufficient stock"
+msgstr "Zaxira yetarli emas"
+
+msgid "Invalid movement type."
+msgstr "Harakat turi noto‘g‘ri."
+
+msgid "Inventory"
+msgstr "Ombor"
+
+msgid "Inventory Value"
+msgstr "Ombor qiymati"
+
+msgid "Issue inventory. Quantity cannot exceed available stock."
+msgstr "Ombordan mahsulot chiqaring. Miqdor mavjud zaxiradan oshmasligi kerak."
+
+msgid "Last name"
+msgstr "Familiya"
+
+msgid "Leave blank to keep current password."
+msgstr "Joriy parolni saqlash uchun bo‘sh qoldiring."
+
+msgid "Login"
+msgstr "Kirish"
+
+msgid "Logout"
+msgstr "Chiqish"
+
+msgid "Low Stock"
+msgstr "Kam zaxira"
+
+msgid "Low Stock Products"
+msgstr "Zaxirasi kam mahsulotlar"
+
+msgid "Low stock"
+msgstr "Zaxirasi kam"
+
+msgid "Main menu"
+msgstr "Asosiy menyu"
+
+msgid "Main navigation"
+msgstr "Asosiy navigatsiya"
+
+msgid "Manager"
+msgstr "Menejer"
+
+msgid "Min"
+msgstr "Min."
+
+msgid "Min Stock"
+msgstr "Minimal zaxira"
+
+msgid "Min stock"
+msgstr "Minimal zaxira"
+
+msgid "Minimum stock"
+msgstr "Minimal zaxira"
+
+msgid "Name"
+msgstr "Nomi"
+
+msgid "Name or SKU"
+msgstr "Nomi yoki SKU"
+
+msgid "Next"
+msgstr "Keyingi"
+
+msgid "No categories"
+msgstr "Kategoriyalar yo‘q"
+
+msgid "No data"
+msgstr "Ma’lumot yo‘q"
+
+msgid "No movements"
+msgstr "Harakatlar yo‘q"
+
+msgid "No movements yet"
+msgstr "Hozircha harakatlar yo‘q"
+
+msgid "No products found"
+msgstr "Mahsulotlar topilmadi"
+
+msgid "No records"
+msgstr "Yozuvlar yo‘q"
+
+msgid "No stock alerts"
+msgstr "Zaxira ogohlantirishlari yo‘q"
+
+msgid "Note"
+msgstr "Izoh"
+
+msgid "Notifications"
+msgstr "Bildirishnomalar"
+
+msgid "OK"
+msgstr "Yaxshi"
+
+msgid "On hand"
+msgstr "Mavjud"
+
+msgid "Only used when creating a new product."
+msgstr "Faqat yangi mahsulot yaratilganda ishlatiladi."
+
+msgid "Open navigation menu"
+msgstr "Navigatsiya menyusini ochish"
+
+msgid "PDF (architecture)"
+msgstr "PDF (arxitektura)"
+
+msgid "PDF export is not enabled in this deployment. Use CSV export, or install WeasyPrint/ReportLab and implement apps.reports.pdf.render_report_pdf."
+msgstr "Bu muhitda PDF eksporti yoqilmagan. CSV eksportidan foydalaning yoki WeasyPrint/ReportLab o‘rnating va apps.reports.pdf.render_report_pdf funksiyasini amalga oshiring."
+
+msgid "Page %(number)s of %(total)s"
+msgstr "%(number)s / %(total)s-sahifa"
+
+msgid "Password"
+msgstr "Parol"
+
+msgid "Enter a valid username. This value may contain only letters, numbers, and @/./+/-/_ characters."
+msgstr "Foydalanuvchi nomi noto‘g‘ri. Faqat harflar, raqamlar va @/./+/-/_ belgilaridan foydalanish mumkin."
+
+msgid "Please enter a correct %(username)s and password. Note that both fields may be case-sensitive."
+msgstr "%(username)s va parolni to‘g‘ri kiriting. Har ikkala maydonda katta-kichik harflar farqlanadi."
+
+msgid "This account is inactive."
+msgstr "Bu hisob faol emas."
+
+msgid "The two password fields didn’t match."
+msgstr "Kiritilgan parollar bir-biriga mos kelmadi."
+
+msgid "The password is too similar to the %(verbose_name)s."
+msgstr "Parol %(verbose_name)s maydoniga juda o‘xshash."
+
+msgid "Your password can’t be too similar to your other personal information."
+msgstr "Parolingiz boshqa shaxsiy ma’lumotlaringizga juda o‘xshash bo‘lmasligi kerak."
+
+msgid "This password is too short. It must contain at least %d character."
+msgid_plural "This password is too short. It must contain at least %d characters."
+msgstr[0] "Parol juda qisqa. Unda kamida %d ta belgi bo‘lishi kerak."
+msgstr[1] "Parol juda qisqa. Unda kamida %d ta belgi bo‘lishi kerak."
+
+msgid "Your password must contain at least %(min_length)d character."
+msgid_plural "Your password must contain at least %(min_length)d characters."
+msgstr[0] "Parolda kamida %(min_length)d ta belgi bo‘lishi kerak."
+msgstr[1] "Parolda kamida %(min_length)d ta belgi bo‘lishi kerak."
+
+msgid "This password is too common."
+msgstr "Bu parol juda ko‘p ishlatiladi."
+
+msgid "Your password can’t be a commonly used password."
+msgstr "Parol keng tarqalgan parollardan bo‘lmasligi kerak."
+
+msgid "This password is entirely numeric."
+msgstr "Parol faqat raqamlardan iborat."
+
+msgid "Your password can’t be entirely numeric."
+msgstr "Parol faqat raqamlardan iborat bo‘lmasligi kerak."
+
+msgid "Pagination"
+msgstr "Sahifalar"
+
+msgid "Posted"
+msgstr "Qayd etildi"
+
+msgid "Previous"
+msgstr "Oldingi"
+
+msgid "Price cannot be negative."
+msgstr "Narx manfiy bo‘lishi mumkin emas."
+
+msgid "Product"
+msgstr "Mahsulot"
+
+msgid "Product created."
+msgstr "Mahsulot yaratildi."
+
+msgid "Product deleted."
+msgstr "Mahsulot o‘chirildi."
+
+msgid "Product has stock history and cannot be deleted. It was deactivated instead."
+msgstr "Mahsulotning zaxira tarixi bor va uni o‘chirib bo‘lmaydi. Mahsulot faolsizlantirildi."
+
+msgid "Product name cannot be empty."
+msgstr "Mahsulot nomi bo‘sh bo‘lishi mumkin emas."
+
+msgid "Product statistics"
+msgstr "Mahsulot statistikasi"
+
+msgid "Product statistics chart"
+msgstr "Mahsulot statistikasi diagrammasi"
+
+msgid "Product updated."
+msgstr "Mahsulot yangilandi."
+
+msgid "Products"
+msgstr "Mahsulotlar"
+
+msgid "Profile & settings"
+msgstr "Profil va sozlamalar"
+
+msgid "Purchase"
+msgstr "Xarid"
+
+msgid "Purchase / Selling"
+msgstr "Xarid / Sotuv"
+
+msgid "Purchase Price"
+msgstr "Xarid narxi"
+
+msgid "Purchase price"
+msgstr "Xarid narxi"
+
+msgid "Qty"
+msgstr "Miqdor"
+
+msgid "Quantity"
+msgstr "Miqdor"
+
+msgid "Quantity cannot be negative."
+msgstr "Miqdor manfiy bo‘lishi mumkin emas."
+
+msgid "Quantity must be at least 1."
+msgstr "Miqdor kamida 1 bo‘lishi kerak."
+
+msgid "Receive inventory into the warehouse."
+msgstr "Omborga mahsulot qabul qiling."
+
+msgid "Recent Stock Movements"
+msgstr "So‘nggi zaxira harakatlari"
+
+msgid "Recent movements"
+msgstr "So‘nggi harakatlar"
+
+msgid "Record Stock In"
+msgstr "Kirimni qayd etish"
+
+msgid "Record Stock Out"
+msgstr "Chiqimni qayd etish"
+
+msgid "Record stock"
+msgstr "Zaxirani qayd etish"
+
+msgid "Remember me"
+msgstr "Meni eslab qolish"
+
+msgid "Report"
+msgstr "Hisobot"
+
+msgid "Reports"
+msgstr "Hisobotlar"
+
+msgid "Role"
+msgstr "Rol"
+
+msgid "Run"
+msgstr "Ko‘rsatish"
+
+msgid "SKU"
+msgstr "SKU"
+
+msgid "SKU must be unique."
+msgstr "SKU takrorlanmas bo‘lishi kerak."
+
+msgid "Save"
+msgstr "Saqlash"
+
+msgid "Save Adjustment"
+msgstr "Tuzatishni saqlash"
+
+msgid "Search products or SKU"
+msgstr "Mahsulot yoki SKU bo‘yicha qidirish"
+
+msgid "Search products or SKU..."
+msgstr "Mahsulot yoki SKU bo‘yicha qidirish..."
+
+msgid "Selling"
+msgstr "Sotuv"
+
+msgid "Selling price"
+msgstr "Sotuv narxi"
+
+msgid "Set the on-hand quantity to a counted value."
+msgstr "Mavjud miqdorni sanalgan qiymatga o‘rnating."
+
+msgid "Set up your access to the Ombor workspace"
+msgstr "Ombor ish maydoniga kirishni sozlang"
+
+msgid "Settings"
+msgstr "Sozlamalar"
+
+msgid "Sign in"
+msgstr "Kirish"
+
+msgid "Sign in to your Ombor workspace"
+msgstr "Ombor ish maydoniga kiring"
+
+msgid "Something went wrong on our side."
+msgstr "Tizimda xatolik yuz berdi."
+
+msgid "Staff"
+msgstr "Xodim"
+
+msgid "Status"
+msgstr "Holat"
+
+msgid "Stock Adjustment"
+msgstr "Zaxiraga tuzatish"
+
+msgid "Stock History"
+msgstr "Zaxira tarixi"
+
+msgid "Stock movement chart"
+msgstr "Zaxira harakatlari diagrammasi"
+
+msgid "Stock IN / OUT (14 days)"
+msgstr "14 kunlik kirim / chiqim"
+
+msgid "Stock In"
+msgstr "Kirim"
+
+msgid "Stock Out"
+msgstr "Chiqim"
+
+msgid "Stock status"
+msgstr "Zaxira holati"
+
+msgid "Super Admin"
+msgstr "Super administrator"
+
+msgid "The page you requested was not found."
+msgstr "Siz so‘ragan sahifa topilmadi."
+
+msgid "The request could not be understood."
+msgstr "So‘rovni tushunib bo‘lmadi."
+
+msgid "Theme is stored in this browser only."
+msgstr "Mavzu faqat shu brauzerda saqlanadi."
+
+msgid "This action cannot be undone."
+msgstr "Bu amalni ortga qaytarib bo‘lmaydi."
+
+msgid "This email address is already registered."
+msgstr "Bu elektron pochta manzili allaqachon ro‘yxatdan o‘tgan."
+
+msgid "This username is already registered."
+msgstr "Bu foydalanuvchi nomi allaqachon ro‘yxatdan o‘tgan."
+
+msgid "To"
+msgstr "Gacha"
+
+msgid "Today IN / OUT"
+msgstr "Bugungi kirim / chiqim"
+
+msgid "Toggle dark / light"
+msgstr "Qorong‘i / yorug‘ rejim"
+
+msgid "Total"
+msgstr "Jami"
+
+msgid "Total Products"
+msgstr "Jami mahsulotlar"
+
+msgid "Total Stock"
+msgstr "Jami zaxira"
+
+msgid "Type"
+msgstr "Turi"
+
+msgid "Unit"
+msgstr "Birlik"
+
+msgid "Unit price"
+msgstr "Birlik narxi"
+
+msgid "Unknown report"
+msgstr "Noma’lum hisobot"
+
+msgid "User"
+msgstr "Foydalanuvchi"
+
+msgid "User activated."
+msgstr "Foydalanuvchi faollashtirildi."
+
+msgid "User created."
+msgstr "Foydalanuvchi yaratildi."
+
+msgid "User deactivated."
+msgstr "Foydalanuvchi faolsizlantirildi."
+
+msgid "User updated."
+msgstr "Foydalanuvchi yangilandi."
+
+msgid "Username"
+msgstr "Foydalanuvchi nomi"
+
+msgid "Username or Email"
+msgstr "Foydalanuvchi nomi yoki elektron pochta"
+
+msgid "Username or email"
+msgstr "Foydalanuvchi nomi yoki elektron pochta"
+
+msgid "Users"
+msgstr "Foydalanuvchilar"
+
+msgid "Value"
+msgstr "Qiymat"
+
+msgid "View"
+msgstr "Ko‘rish"
+
+msgid "View all"
+msgstr "Barchasini ko‘rish"
+
+msgid "Welcome back"
+msgstr "Xush kelibsiz"
+
+msgid "Welcome back!"
+msgstr "Qaytganingiz bilan!"
+
+msgid "You cannot deactivate your own account."
+msgstr "O‘z hisobingizni faolsizlantira olmaysiz."
+
+msgid "You do not have permission to access this page."
+msgstr "Bu sahifaga kirish uchun ruxsatingiz yo‘q."
+
+msgid "You do not have permission to view this page."
+msgstr "Bu sahifani ko‘rish uchun ruxsatingiz yo‘q."
+
+msgid "You have been logged out."
+msgstr "Tizimdan chiqdingiz."
+
+msgid "Your account has been created."
+msgstr "Hisobingiz yaratildi."
+
+msgid "%(count)s product(s) are linked to this category. Remove or reassign them before deleting."
+msgstr "%(count)s ta mahsulot ushbu kategoriyaga biriktirilgan. O‘chirishdan oldin ularni olib tashlang yoki boshqa kategoriyaga o‘tkazing."

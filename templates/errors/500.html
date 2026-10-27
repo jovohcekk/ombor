@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}500{% endblock %}
+{% block body %}
+<div class="error-page">
+  <div class="brand-mark lg mx-auto mb-3">O</div>
+  <h1>500</h1>
+  <p class="text-muted">{% translate "Something went wrong on our side." %}</p>
+  <a class="btn btn-primary" href="{% url 'dashboard:home' %}">{% translate "Back to dashboard" %}</a>
+</div>
+{% endblock %}

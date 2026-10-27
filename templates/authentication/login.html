@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% translate "Login" %}{% endblock %}
+{% block body %}
+<div class="login-page">
+  <div class="login-card">
+    <div class="text-center mb-4">
+      <div class="brand-mark lg mx-auto mb-3">O</div>
+      <span class="eyebrow auth-eyebrow">{% translate "INVENTORY MANAGEMENT" %}</span>
+      <h1 class="h3 mb-2 mt-2">{% translate "Welcome back" %}</h1>
+      <p class="text-muted small mb-0">{% translate "Sign in to your Ombor workspace" %}</p>
+    </div>
+    {% if messages %}
+      {% for message in messages %}
+      <div class="alert alert-{{ message.tags|default:'info' }}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+    {% if form.non_field_errors %}
+    <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+    {% endif %}
+    <form method="post" novalidate>
+      {% csrf_token %}
+      {% if redirect_field_value %}
+      <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}">
+      {% endif %}
+      <div class="mb-3">
+        <label class="form-label" for="{{ form.username.id_for_label }}">{% translate "Username or Email" %}</label>
+        {{ form.username }}
+        {% for e in form.username.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="{{ form.password.id_for_label }}">{% translate "Password" %}</label>
+        {{ form.password }}
+        {% for e in form.password.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+      </div>
+      <div class="mb-3 form-check">
+        {{ form.remember_me }}
+        <label class="form-check-label" for="{{ form.remember_me.id_for_label }}">{% translate "Remember me" %}</label>
+      </div>
+      <button type="submit" class="btn btn-primary w-100">{% translate "Sign in" %}</button>
+    </form>
+    <p class="text-center text-muted small mt-4 mb-0">
+      {% translate "Don't have an account?" %} <a href="{% url 'register' %}">{% translate "Create one" %}</a>
+    </p>
+  </div>
+</div>
+{% endblock %}

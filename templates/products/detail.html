@@ -1,0 +1,50 @@
+{% extends "dashboard/layout.html" %}
+{% load i18n l10n %}
+{% block title %}{{ product.name }}{% endblock %}
+{% block content %}
+<div class="page-header d-flex justify-content-between">
+  <div>
+    <h1 class="page-title">{{ product.name }}</h1>
+    <p class="text-muted mb-0">{% translate "SKU" %}: {{ product.sku }}</p>
+  </div>
+  {% if can_manage_products %}
+  <a href="{% url 'dashboard:product_edit' product.pk %}" class="btn btn-primary">{% translate "Edit" %}</a>
+  {% endif %}
+</div>
+<div class="row g-4">
+  <div class="col-md-4">
+    <div class="card panel-card p-3 text-center">
+      {% if product.image %}<img src="{{ product.image.url }}" class="img-fluid rounded product-detail-image" alt="{{ product.name }}" width="640" height="480">{% endif %}
+      <dl class="text-start mt-3 mb-0">
+        <dt>{% translate "Category" %}</dt><dd>{{ product.category.name }}</dd>
+        <dt>{% translate "Quantity" %}</dt><dd>{{ product.quantity|localize }}</dd>
+        <dt>{% translate "Min stock" %}</dt><dd>{{ product.minimum_stock|localize }}</dd>
+        <dt>{% translate "Purchase / Selling" %}</dt><dd>{{ product.purchase_price|localize }} / {{ product.selling_price|localize }}</dd>
+      </dl>
+    </div>
+  </div>
+  <div class="col-md-8">
+    <div class="card panel-card">
+      <div class="card-header">{% translate "Recent movements" %}</div>
+      <div class="table-responsive">
+        <table class="table mb-0">
+          <thead><tr><th>{% translate "Type" %}</th><th>{% translate "Qty" %}</th><th>{% translate "Total" %}</th><th>{% translate "User" %}</th><th>{% translate "Date" %}</th></tr></thead>
+          <tbody>
+          {% for m in movements %}
+          <tr>
+            <td>{{ m.get_movement_type_display }}</td>
+            <td>{{ m.quantity|localize }}</td>
+            <td>{{ m.total_price|localize }}</td>
+            <td>{{ m.created_by.username|default:"—" }}</td>
+            <td>{{ m.created_at|date:"DATETIME_FORMAT" }}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="5" class="text-muted text-center">{% translate "No movements" %}</td></tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

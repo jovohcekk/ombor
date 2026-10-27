@@ -1,0 +1,35 @@
+{% extends "dashboard/layout.html" %}
+{% load i18n %}
+{% block title %}{% translate "Users" %}{% endblock %}
+{% block content %}
+<div class="page-header d-flex justify-content-between">
+  <h1 class="page-title">{% translate "Users" %}</h1>
+  <a href="{% url 'dashboard:user_create' %}" class="btn btn-primary">{% translate "Add User" %}</a>
+</div>
+<div class="card panel-card">
+  <div class="table-responsive">
+    <table class="table mb-0 align-middle">
+      <thead><tr><th>{% translate "Username" %}</th><th>{% translate "Email" %}</th><th>{% translate "Role" %}</th><th>{% translate "Status" %}</th><th></th></tr></thead>
+      <tbody>
+      {% for u in users %}
+      <tr>
+        <td>{{ u.username }}</td>
+        <td>{{ u.email }}</td>
+        <td>{{ u.get_role_display }}</td>
+        <td>{% if u.is_active %}<span class="badge bg-success-subtle text-success">{% translate "Active" %}</span>{% else %}<span class="badge bg-secondary">{% translate "Inactive" %}</span>{% endif %}</td>
+        <td class="text-end">
+          <a href="{% url 'dashboard:user_edit' u.pk %}" class="btn btn-sm btn-outline-primary">{% translate "Edit" %}</a>
+          {% if u != request.user %}
+          <form method="post" action="{% url 'dashboard:user_toggle' u.pk %}" class="d-inline">
+            {% csrf_token %}
+            <button class="btn btn-sm btn-outline-secondary" type="submit">{% if u.is_active %}{% translate "Deactivate" %}{% else %}{% translate "Activate" %}{% endif %}</button>
+          </form>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
