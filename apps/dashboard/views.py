@@ -14,6 +14,7 @@ from apps.accounts.permissions import manager_required, super_admin_required
 from apps.dashboard.forms import (
     CategoryForm,
     ProductForm,
+    StockAdjustmentForm,
     StockMovementForm,
     UserCreateForm,
     UserForm,
@@ -217,7 +218,12 @@ def category_delete(request, pk):
 def _stock_form_view(request, movement_type, template, title):
     if not request.user.can_manage_stock:
         raise PermissionDenied
-    form = StockMovementForm(request.POST or None)
+    form_class = (
+        StockAdjustmentForm
+        if movement_type == MovementType.ADJUSTMENT
+        else StockMovementForm
+    )
+    form = form_class(request.POST or None)
     products = list(
         Product.objects.filter(is_active=True).values(
             "id", "name", "quantity", "purchase_price", "selling_price"

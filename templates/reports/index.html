@@ -12,6 +12,13 @@
     <a class="btn btn-outline-secondary" href="{% url 'reports:export_pdf' %}?report={{ report }}&from={{ date_from }}&to={{ date_to }}">{% translate "PDF (architecture)" %}</a>
   </div>
 </div>
+{% if form.errors %}
+<div class="alert alert-danger" role="alert">
+  {% for field in form %}
+    {% for error in field.errors %}<div>{{ field.label }}: {{ error }}</div>{% endfor %}
+  {% endfor %}
+</div>
+{% endif %}
 <form class="card panel-card p-3 mb-3" method="get">
   <div class="row g-2 align-items-end">
     <div class="col-md-3">

@@ -1,10 +1,16 @@
 import re
+from unittest.mock import patch
 
+from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.core import mail
+from django.core.cache import cache
 from django.db import IntegrityError, transaction
 from django.test import Client
 from django.test import TestCase
 from django.urls import reverse
+from rest_framework.throttling import AnonRateThrottle
+from rest_framework.test import APIClient
 
 from apps.accounts.models import UserRole
 from apps.products.models import Category, Product
@@ -315,6 +321,115 @@ class AuthTests(TestCase):
 
         self.assertRedirects(response, reverse("dashboard:home"))
         self.assertEqual(self.client.get(reverse("dashboard:home")).status_code, 200)
+
+    def test_login_honors_safe_next_and_rejects_external_redirects(self):
+        response = self.client.post(
+            f"{reverse('login')}?next={reverse('dashboard:product_list')}",
+            {"username": "demo", "password": "pass12345"},
+        )
+        self.assertRedirects(response, reverse("dashboard:product_list"))
+
+        self.client.post(reverse("logout"))
+        response = self.client.post(
+            f"{reverse('login')}?next=https://example.invalid/",
+            {"username": "demo", "password": "pass12345"},
+        )
+        self.assertRedirects(response, reverse("dashboard:home"))
+
+    def test_admin_password_reset_sends_and_accepts_single_use_link(self):
+        login_page = self.client.get(reverse("admin:login"))
+        self.assertContains(login_page, reverse("admin_password_reset"))
+
+        response = self.client.post(
+            reverse("admin_password_reset"),
+            {"email": self.user.email},
+        )
+        self.assertRedirects(response, reverse("admin_password_reset_done"))
+        self.assertEqual(len(mail.outbox), 1)
+
+        reset_url = re.search(
+            r"http://testserver(?P<path>/manage/reset/\S+)",
+            mail.outbox[0].body,
+        ).group("path")
+        reset_page = self.client.get(reset_url, follow=True)
+        self.assertEqual(reset_page.status_code, 200)
+        password_form_url = reset_page.request["PATH_INFO"]
+        response = self.client.post(
+            password_form_url,
+            {
+                "new_password1": "Fresh-Long-Password-3827!",
+                "new_password2": "Fresh-Long-Password-3827!",
+            },
+        )
+        self.assertRedirects(
+            response,
+            reverse("admin_password_reset_complete"),
+            fetch_redirect_response=False,
+        )
+        self.user.refresh_from_db()
+        self.assertTrue(self.user.check_password("Fresh-Long-Password-3827!"))
+        self.assertFalse(self.client.login(
+            username="demo",
+            password="pass12345",
+        ))
+
+    def test_admin_password_change_updates_current_password(self):
+        admin_user = User.objects.create_superuser(
+            username="password-change-admin",
+            email="password-change@example.com",
+            password="Original-Admin-Password-3827!",
+        )
+        self.client.force_login(admin_user)
+
+        response = self.client.post(
+            reverse("admin:password_change"),
+            {
+                "old_password": "Original-Admin-Password-3827!",
+                "new_password1": "Saffron-Quasar-8391!",
+                "new_password2": "Saffron-Quasar-8391!",
+            },
+        )
+
+        self.assertRedirects(
+            response,
+            reverse("admin:password_change_done"),
+            fetch_redirect_response=False,
+        )
+        admin_user.refresh_from_db()
+        self.assertTrue(admin_user.check_password("Saffron-Quasar-8391!"))
+        self.assertEqual(self.client.get(reverse("admin:index")).status_code, 200)
+
+    def test_api_schema_and_docs_are_public_but_api_data_requires_authentication(self):
+        api = APIClient()
+        self.assertEqual(api.get("/api/schema/").status_code, 200)
+        self.assertEqual(api.get("/api/docs/").status_code, 200)
+        self.assertEqual(api.get("/api/products/").status_code, 401)
+
+        admin_user = User.objects.create_superuser(
+            username="schema-admin",
+            email="schema-admin@example.com",
+            password="Schema-Admin-Password-3827!",
+        )
+        api.force_authenticate(user=admin_user)
+        self.assertEqual(api.get("/api/schema/").status_code, 200)
+        self.assertEqual(api.get("/api/docs/").status_code, 200)
+
+    def test_jwt_token_endpoint_enforces_anonymous_throttle(self):
+        throttle_rates = {
+            **settings.REST_FRAMEWORK["DEFAULT_THROTTLE_RATES"],
+            "anon": "1/minute",
+        }
+        with patch.object(AnonRateThrottle, "THROTTLE_RATES", throttle_rates):
+            cache.clear()
+            api = APIClient()
+            payload = {"username": "demo", "password": "pass12345"}
+
+            first_response = api.post("/api/auth/token/", payload, format="json")
+            second_response = api.post("/api/auth/token/", payload, format="json")
+
+            self.assertEqual(first_response.status_code, 200)
+            self.assertEqual(second_response.status_code, 429)
+            cache.clear()
 
     def test_login_rejects_incorrect_password(self):
         response = self.client.post(

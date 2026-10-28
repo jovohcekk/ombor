@@ -19,7 +19,7 @@ class StockMovement(models.Model):
         related_name="movements",
     )
     movement_type = models.CharField(max_length=12, choices=MovementType.choices)
-    quantity = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    quantity = models.PositiveIntegerField(validators=[MinValueValidator(0)])
     unit_price = models.DecimalField(
         max_digits=12,
         decimal_places=2,

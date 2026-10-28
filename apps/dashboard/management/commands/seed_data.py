@@ -14,13 +14,6 @@ User = get_user_model()
 class Command(BaseCommand):
     help = "Seed demo categories, products, stock movements, and users"
 
-    def add_arguments(self, parser):
-        parser.add_argument(
-            "--force-password",
-            action="store_true",
-            help="Reset demo admin password to the documented demo value.",
-        )
-
     def handle(self, *args, **options):
         admin, created = User.objects.get_or_create(
             username="admin",
@@ -31,15 +24,17 @@ class Command(BaseCommand):
                 "is_superuser": True,
             },
         )
-        if created or options["force_password"]:
-            admin.set_password("Admin123!")
-            admin.role = UserRole.SUPER_ADMIN
-            admin.is_staff = True
-            admin.is_superuser = True
+        if created:
+            admin.set_unusable_password()
             admin.save()
-            self.stdout.write(self.style.SUCCESS("Demo admin: admin / Admin123!"))
+            self.stdout.write(
+                self.style.SUCCESS(
+                    "Created demo admin with no usable password. "
+                    "Set one with `python manage.py changepassword admin`."
+                )
+            )
         else:
-            self.stdout.write("Admin user already exists (password unchanged)")
+            self.stdout.write("Admin user already exists (unchanged)")
 
         for username, role, email in (
             ("manager", UserRole.MANAGER, "manager@example.com"),
@@ -50,9 +45,14 @@ class Command(BaseCommand):
                 defaults={"email": email, "role": role},
             )
             if made:
-                user.set_password("Demo12345!")
+                user.set_unusable_password()
                 user.save()
-                self.stdout.write(self.style.SUCCESS(f"Created {username} / Demo12345!"))
+                self.stdout.write(
+                    self.style.SUCCESS(
+                        f"Created {username} with no usable password; set one through "
+                        "Django admin if needed."
+                    )
+                )
 
         categories_data = [
             ("Electronics", "Phones, laptops, accessories"),

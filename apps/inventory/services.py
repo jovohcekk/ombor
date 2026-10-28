@@ -31,7 +31,9 @@ def apply_stock_movement(
 ) -> StockMovement:
     product = Product.objects.select_for_update().get(pk=product.pk)
 
-    if quantity < 1:
+    if quantity < 0:
+        raise ValidationError(_("Quantity cannot be negative."))
+    if quantity < 1 and movement_type != MovementType.ADJUSTMENT:
         raise ValidationError(_("Quantity must be at least 1."))
     if unit_price is None or Decimal(unit_price) < 0:
         raise ValidationError(_("Price cannot be negative."))
@@ -66,7 +68,10 @@ def apply_stock_movement(
 
 
 @transaction.atomic
-def create_product_with_initial_stock(*, product: Product, initial_quantity: int, user) -> Product:
+@transaction.atomic
+def create_product_with_initial_stock(
+    *, product: Product, initial_quantity: int, user
+) -> Product:
     product.quantity = 0
     product.save()
     if initial_quantity and initial_quantity > 0:

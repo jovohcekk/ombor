@@ -10,6 +10,7 @@ def dashboard_context(request):
         "purchase": gettext("Purchase"),
         "selling": gettext("Selling"),
         "quantity_minimum": gettext("Quantity must be at least 1."),
+        "quantity_non_negative": gettext("Quantity cannot be negative."),
         "insufficient_stock": gettext("Insufficient stock"),
         "stock_in": gettext("Stock In"),
         "stock_out": gettext("Stock Out"),

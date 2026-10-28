@@ -24,6 +24,7 @@
         <option value="">{% translate "Stock status" %}</option>
         <option value="low" {% if filters.stock == 'low' %}selected{% endif %}>{% translate "Low stock" %}</option>
         <option value="ok" {% if filters.stock == 'ok' %}selected{% endif %}>{% translate "OK" %}</option>
+        <option value="out" {% if filters.stock == 'out' %}selected{% endif %}>{% translate "Out of stock" %}</option>
       </select>
     </div>
     <div class="col-md-2">

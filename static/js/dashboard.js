@@ -99,9 +99,14 @@
       const p = currentProduct();
       const quantity = qty ? Number(qty.value) : 0;
       if (!p) return;
-      if (quantity < 1) {
+      const minimumQuantity = type === "ADJUSTMENT" ? 0 : 1;
+      if (quantity < minimumQuantity) {
         event.preventDefault();
-        alert(translations.quantity_minimum);
+        alert(
+          minimumQuantity === 0
+            ? translations.quantity_non_negative
+            : translations.quantity_minimum,
+        );
         return;
       }
       if (type === "OUT" && quantity > Number(p.quantity)) {

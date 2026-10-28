@@ -7,6 +7,7 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.inventory.models import MovementType
 from apps.products.models import Product
+from apps.reports.forms import ReportFilterForm
 from apps.reports.pdf import PdfExportNotConfigured, render_report_pdf
 from apps.reports.services import (
     build_csv,
@@ -71,24 +72,45 @@ def _report_payload(report, date_from, date_to):
     return [_("Error")], [[_("Unknown report")]]
 
 
+def _get_report_filters(request):
+    data = request.GET.copy()
+    if "report" not in data:
+        data["report"] = "inventory"
+    data["date_from"] = data.get("from", "")
+    data["date_to"] = data.get("to", "")
+    form = ReportFilterForm(data)
+    return form, form.cleaned_data if form.is_valid() else None
+
+
 @login_required
 def reports_home(request):
     if not request.user.can_view_reports:
         raise PermissionDenied
-    date_from = request.GET.get("from", "")
-    date_to = request.GET.get("to", "")
-    report = request.GET.get("report", "inventory")
-    headers, rows = _report_payload(report, date_from, date_to)
+    form, filters = _get_report_filters(request)
+    if filters is None:
+        report = request.GET.get("report", "inventory")
+        date_from = request.GET.get("from", "")
+        date_to = request.GET.get("to", "")
+        headers, rows = [], []
+        status = 400
+    else:
+        report = filters["report"]
+        date_from = filters["date_from"]
+        date_to = filters["date_to"]
+        headers, rows = _report_payload(report, date_from, date_to)
+        status = 200
     return render(
         request,
         "reports/index.html",
         {
+            "form": form,
             "report": report,
             "date_from": date_from,
             "date_to": date_to,
             "headers": headers,
             "rows": rows,
         },
+        status=status,
     )
 
 
@@ -96,9 +118,16 @@ def reports_home(request):
 def reports_export_csv(request):
     if not request.user.can_view_reports:
         raise PermissionDenied
-    report = request.GET.get("report", "inventory")
-    date_from = request.GET.get("from") or None
-    date_to = request.GET.get("to") or None
+    filter_form, filters = _get_report_filters(request)
+    if filters is None:
+        return HttpResponse(
+            _("Invalid report filters.") + "\n" + filter_form.errors.as_text(),
+            content_type="text/plain",
+            status=400,
+        )
+    report = filters["report"]
+    date_from = filters["date_from"]
+    date_to = filters["date_to"]
     headers, rows = _report_payload(report, date_from, date_to)
     response = HttpResponse(build_csv(headers, rows), content_type="text/csv")
     response["Content-Disposition"] = f'attachment; filename="{report}.csv"'
@@ -109,9 +138,16 @@ def reports_export_csv(request):
 def reports_export_pdf(request):
     if not request.user.can_view_reports:
         raise PermissionDenied
-    report = request.GET.get("report", "inventory")
-    date_from = request.GET.get("from") or None
-    date_to = request.GET.get("to") or None
+    filter_form, filters = _get_report_filters(request)
+    if filters is None:
+        return HttpResponse(
+            _("Invalid report filters.") + "\n" + filter_form.errors.as_text(),
+            content_type="text/plain",
+            status=400,
+        )
+    report = filters["report"]
+    date_from = filters["date_from"]
+    date_to = filters["date_to"]
     headers, rows = _report_payload(report, date_from, date_to)
     try:
         pdf_bytes = render_report_pdf(report, headers, rows)

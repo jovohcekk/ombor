@@ -1,13 +1,19 @@
 from decimal import Decimal
+from unittest.mock import patch
 
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework.test import APIClient
 
 from apps.accounts.models import UserRole
 from apps.inventory.models import MovementType, StockMovement
-from apps.inventory.services import InsufficientStockError, apply_stock_movement
+from apps.inventory.services import (
+    InsufficientStockError,
+    apply_stock_movement,
+    create_product_with_initial_stock,
+)
 from apps.products.models import Category, Product
 
 User = get_user_model()
@@ -109,6 +115,39 @@ class InventoryTestCase(TestCase):
         self.product.refresh_from_db()
         self.assertEqual(self.product.quantity, 4)
 
+    def test_adjustment_can_set_stock_to_zero(self):
+        movement = apply_stock_movement(
+            product=self.product,
+            movement_type=MovementType.ADJUSTMENT,
+            quantity=0,
+            unit_price=Decimal("10"),
+            note="zero count",
+            user=self.manager,
+        )
+        self.product.refresh_from_db()
+        self.assertEqual(self.product.quantity, 0)
+        self.assertEqual(movement.quantity, 0)
+
+    def test_initial_stock_failure_rolls_back_product_creation(self):
+        product = Product(
+            name="Atomic Widget",
+            sku="W-ATOMIC",
+            category=self.cat,
+            purchase_price=Decimal("10.00"),
+            selling_price=Decimal("15.00"),
+        )
+        with patch(
+            "apps.inventory.services.apply_stock_movement",
+            side_effect=ValidationError("stock movement failed"),
+        ):
+            with self.assertRaises(ValidationError):
+                create_product_with_initial_stock(
+                    product=product,
+                    initial_quantity=5,
+                    user=self.manager,
+                )
+        self.assertFalse(Product.objects.filter(sku="W-ATOMIC").exists())
+
     def test_login_and_dashboard(self):
         logged_in = self.client.login(username="manager", password="pass12345")
         self.assertTrue(logged_in)
@@ -157,6 +196,22 @@ class InventoryTestCase(TestCase):
         self.product.refresh_from_db()
         self.assertEqual(self.product.quantity, 10)
 
+    def test_stock_adjustment_form_accepts_zero(self):
+        self.client.login(username="manager", password="pass12345")
+        response = self.client.post(
+            reverse("dashboard:stock_adjust"),
+            {
+                "product": self.product.pk,
+                "quantity": 0,
+                "unit_price": "10.00",
+                "note": "counted empty",
+            },
+        )
+
+        self.assertRedirects(response, reverse("dashboard:stock_history"))
+        self.product.refresh_from_db()
+        self.assertEqual(self.product.quantity, 0)
+
     def test_api_products_authenticated(self):
         api = APIClient()
         api.force_authenticate(user=self.manager)
@@ -190,6 +245,50 @@ class InventoryTestCase(TestCase):
             format="json",
         )
         self.assertEqual(response.status_code, 400)
+
+    def test_api_stock_adjustment_accepts_zero(self):
+        api = APIClient()
+        api.force_authenticate(user=self.manager)
+
+        response = api.post(
+            "/api/stock/adjust/",
+            {"product": self.product.id, "quantity": 0, "unit_price": "10.00"},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, 201)
+        self.product.refresh_from_db()
+        self.assertEqual(self.product.quantity, 0)
+
+    def test_user_api_enforces_django_password_validators(self):
+        api = APIClient()
+        api.force_authenticate(user=self.admin)
+        payload = {
+            "username": "api-created",
+            "email": "api-created@example.com",
+            "role": UserRole.STAFF,
+            "password": "password",
+        }
+
+        weak_password = api.post("/api/users/", payload, format="json")
+        self.assertEqual(weak_password.status_code, 400)
+        self.assertFalse(User.objects.filter(username="api-created").exists())
+
+        payload["password"] = "Very-Different-Api-Password-9274!"
+        created = api.post("/api/users/", payload, format="json")
+        self.assertEqual(created.status_code, 201)
+        user = User.objects.get(username="api-created")
+        self.assertTrue(user.check_password(payload["password"]))
+        self.assertNotEqual(user.password, payload["password"])
+
+        weak_update = api.patch(
+            f"/api/users/{user.pk}/",
+            {"password": "password"},
+            format="json",
+        )
+        self.assertEqual(weak_update.status_code, 400)
+        user.refresh_from_db()
+        self.assertTrue(user.check_password(payload["password"]))
 
     def test_api_staff_cannot_create_category(self):
         api = APIClient()

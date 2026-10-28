@@ -1,6 +1,6 @@
 # Ombor — Inventory Management System
 
-Production-ready Django inventory platform for warehouses, shops, and small businesses. The primary interface is a **custom admin dashboard** at `/dashboard/`. Django’s built-in `/admin/` is not used as the product UI.
+Django inventory platform for warehouses, shops, and small businesses. The primary interface is a **custom dashboard** at `/dashboard/`; Django’s built-in admin is available at `/manage/`.
 
 ## Features
 
@@ -15,7 +15,7 @@ Production-ready Django inventory platform for warehouses, shops, and small busi
 
 ## Technologies
 
-Python 3.12, Django 5, Django REST Framework, SimpleJWT, PostgreSQL (production), SQLite (local), WhiteNoise, Gunicorn, Bootstrap 5, Chart.js
+Python 3.12, Django 6.1, Django REST Framework, SimpleJWT, PostgreSQL (production), SQLite (local), WhiteNoise, Gunicorn, Bootstrap 5, Chart.js
 
 ## Project structure
 
@@ -69,6 +69,10 @@ See `.env.example`. Never commit `.env`.
 | `CORS_ALLOWED_ORIGINS` | Optional API browser origins |
 | `SECURE_SSL_REDIRECT` | HTTPS redirect when `DEBUG=False` |
 | `TIME_ZONE` | Default `Asia/Tashkent` |
+| `EMAIL_HOST`, `EMAIL_PORT` | SMTP server used for admin password reset |
+| `EMAIL_HOST_USER`, `EMAIL_HOST_PASSWORD` | Optional SMTP authentication credentials |
+| `EMAIL_USE_TLS`, `EMAIL_USE_SSL` | SMTP transport security; enable only one |
+| `DEFAULT_FROM_EMAIL` | Sender address for password reset messages |
 
 ## Database setup
 
@@ -82,25 +86,26 @@ python manage.py makemigrations
 python manage.py migrate
 ```
 
-## Superuser
+## Superuser and password resets
 
 ```bash
 python manage.py createsuperuser
 ```
 
-Or demo data (local / staging only):
+The built-in admin is at `/manage/`. Its password reset link uses the configured SMTP
+server. In local development, reset messages are written to the console. Production
+requires `EMAIL_HOST` and `DEFAULT_FROM_EMAIL`; configure SMTP credentials in the
+hosting environment rather than in source control.
+
+Seed sample data only in a local or disposable staging database:
 
 ```bash
 python manage.py seed_data
 ```
 
-Demo accounts (change immediately; they are **not** created automatically in production):
-
-| User | Password | Role |
-|------|----------|------|
-| `admin` | `Admin123!` | Super Admin |
-| `manager` | `Demo12345!` | Manager |
-| `staff` | `Demo12345!` | Staff |
+The seed command creates its sample accounts with unusable passwords and never changes
+passwords of existing accounts. Set an account password explicitly with Django's
+`changepassword` command when needed. Do not run sample-data commands against production.
 
 ## Run development server
 
@@ -111,6 +116,7 @@ python manage.py runserver
 - Login: http://127.0.0.1:8000/login/
 - Register: http://127.0.0.1:8000/register/
 - Dashboard: http://127.0.0.1:8000/dashboard/
+- Django admin: http://127.0.0.1:8000/manage/
 - API docs: http://127.0.0.1:8000/api/docs/
 
 ## Roles
@@ -152,17 +158,20 @@ Example:
 ```bash
 curl -X POST http://127.0.0.1:8000/api/auth/token/ \
   -H "Content-Type: application/json" \
-  -d "{\"username\":\"admin\",\"password\":\"Admin123!\"}"
+  -d "{\"username\":\"YOUR_USERNAME\",\"password\":\"YOUR_PASSWORD\"}"
 ```
 
 ## Render deployment
 
-1. Push this repository (exclude `.env` and `env/`).
-2. Create a Blueprint from `render.yaml`, or a Web Service + PostgreSQL database.
-3. Set `ALLOWED_HOSTS` to your Render hostname.
-4. Set `CSRF_TRUSTED_ORIGINS` to `https://<your-host>`.
-5. `build.sh` installs dependencies, collects static files, and migrates.
-6. Start command: `gunicorn config.wsgi:application --bind 0.0.0.0:$PORT`
+1. Create a Blueprint from `render.yaml`, or a Web Service + PostgreSQL database.
+2. Set `ALLOWED_HOSTS` and `CSRF_TRUSTED_ORIGINS` for the deployed hostname. When
+   `RENDER_EXTERNAL_HOSTNAME` is present, settings also add the Render hostname and
+   its HTTPS origin automatically.
+3. Configure `EMAIL_HOST` and `DEFAULT_FROM_EMAIL`; add SMTP username/password if
+   required by the provider. Keep credentials in Render environment variables.
+4. `build.sh` installs dependencies, collects static files, and applies pending
+   migrations. Review migration operations before deploying schema changes.
+5. Start command: `gunicorn config.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 60`
 
 If `RENDER_EXTERNAL_HOSTNAME` is present, it is added to `ALLOWED_HOSTS` and CSRF origins automatically.
 
@@ -173,11 +182,12 @@ Product images are stored in `MEDIA_ROOT`. Render’s disk is ephemeral, so uplo
 ## Production configuration
 
 - `DEBUG=False`
-- Strong unique `SECRET_KEY`
+- Strong unique `SECRET_KEY` (Render generates one from the Blueprint)
 - PostgreSQL via `DATABASE_URL`
 - HTTPS cookies and HSTS when `DEBUG=False`
+- SMTP configuration for password reset
 - External object storage for media
-- Do not rely on `seed_data` passwords
+- Never use sample-data accounts as production credentials
 
 ## Tests and checks
 
@@ -198,4 +208,4 @@ python manage.py collectstatic --noinput
 | Login fails for a user | Confirm `is_active` and password |
 | Permission denied | Check `role` (super_admin / manager / staff) |
 | Insufficient stock | OUT quantity is greater than on-hand stock |
-| PDF export returns 501 | Expected until WeasyPrint/ReportLab is wired in `apps/reports/pdf.py` |
+| PDF export returns 501 | PDF generation is not implemented; CSV export is available |

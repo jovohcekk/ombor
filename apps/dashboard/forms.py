@@ -215,6 +215,14 @@ class StockMovementForm(forms.Form):
     )
 
 
+class StockAdjustmentForm(StockMovementForm):
+    quantity = forms.IntegerField(
+        label=_("Quantity"),
+        min_value=0,
+        widget=forms.NumberInput(attrs={"class": "form-control", "min": "0"}),
+    )
+
+
 class UserForm(forms.ModelForm):
     password = forms.CharField(
         label=_("Password"),

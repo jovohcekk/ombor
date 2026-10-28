@@ -68,3 +68,4 @@ class StockOutSerializer(StockActionSerializer):
 
 class StockAdjustSerializer(StockActionSerializer):
     movement_type = MovementType.ADJUSTMENT
+    quantity = serializers.IntegerField(min_value=0)

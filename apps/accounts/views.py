@@ -26,7 +26,7 @@ class CustomLoginView(LoginView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy("dashboard:home")
+        return self.get_redirect_url() or reverse_lazy("dashboard:home")
 
 
 class RegistrationView(FormView):
