@@ -97,6 +97,89 @@ server. In local development, reset messages are written to the console. Product
 requires `EMAIL_HOST` and `DEFAULT_FROM_EMAIL`; configure SMTP credentials in the
 hosting environment rather than in source control.
 
+### One-time production superuser password reset
+
+`reset_superuser_password_once` is a temporary, explicit management command. It accepts
+the username and new password only through environment variables, refuses non-PostgreSQL
+databases, checks the expected PostgreSQL host and database name, and changes only the
+password of an existing superuser. It validates and verifies the new password without
+printing it. It is not part of application startup, deployment, or an HTTP endpoint.
+
+Do not add this command to `build.sh`, the Render build/start commands, or a recurring
+job. Run it once from a Render one-off command facility only if that facility is
+available for the service and plan and supports transient environment variables for
+that invocation (not saved service settings). This repository's Render web service is
+configured on the `free` plan; if the dashboard does not offer that capability, use the
+authorized local method below rather than changing the service start command.
+
+#### Run once from an authorized local Windows machine
+
+Use the PostgreSQL **external** connection string and its matching host shown in the
+Render database dashboard. The machine must be authorized to connect; if the database
+uses IP allowlisting, temporarily allow the machine's public IP and remove that access
+immediately afterward. Do not use the internal Render connection string from outside
+Render, and do not paste a connection string or password into a command argument,
+source file, `.env`, or chat.
+
+From the repository root in PowerShell, activate the project's virtual environment,
+then run this interaction. Secure prompts prevent credentials from being echoed or
+stored in shell history. The password and database URL are placed in process-scoped
+environment variables only because Django reads its configuration from the environment.
+`DEBUG=True` is set only for this local process so production-only SMTP settings are not
+needed; the command still requires PostgreSQL and the exact expected database host/name.
+
+```powershell
+function Set-ProcessSecretFromPrompt {
+    param([string]$Name, [string]$Prompt)
+    $secureValue = Read-Host -Prompt $Prompt -AsSecureString
+    $bstr = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureValue)
+    try {
+        [Environment]::SetEnvironmentVariable(
+            $Name,
+            [Runtime.InteropServices.Marshal]::PtrToStringBSTR($bstr),
+            'Process'
+        )
+    }
+    finally {
+        [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($bstr)
+        $secureValue.Dispose()
+    }
+}
+
+try {
+    $env:DEBUG = 'True'
+    $env:OMBOR_RESET_SUPERUSER_USERNAME = Read-Host 'Existing superuser username'
+    $env:OMBOR_RESET_SUPERUSER_EXPECTED_DB_NAME = Read-Host 'Expected production database name'
+    $env:OMBOR_RESET_SUPERUSER_EXPECTED_DB_HOST = Read-Host 'Expected production database host'
+    $env:OMBOR_RESET_SUPERUSER_CONFIRM_PRODUCTION = 'I_UNDERSTAND_THIS_CHANGES_A_PRODUCTION_PASSWORD'
+    Set-ProcessSecretFromPrompt 'DATABASE_URL' 'Render external PostgreSQL connection string'
+    Set-ProcessSecretFromPrompt 'OMBOR_RESET_SUPERUSER_PASSWORD' 'New superuser password'
+    python manage.py reset_superuser_password_once
+    if ($LASTEXITCODE -ne 0) {
+        throw "Password reset command failed with exit code $LASTEXITCODE."
+    }
+}
+finally {
+    Remove-Item Env:\DATABASE_URL -ErrorAction SilentlyContinue
+    Remove-Item Env:\OMBOR_RESET_SUPERUSER_USERNAME -ErrorAction SilentlyContinue
+    Remove-Item Env:\OMBOR_RESET_SUPERUSER_PASSWORD -ErrorAction SilentlyContinue
+    Remove-Item Env:\OMBOR_RESET_SUPERUSER_CONFIRM_PRODUCTION -ErrorAction SilentlyContinue
+    Remove-Item Env:\OMBOR_RESET_SUPERUSER_EXPECTED_DB_HOST -ErrorAction SilentlyContinue
+    Remove-Item Env:\OMBOR_RESET_SUPERUSER_EXPECTED_DB_NAME -ErrorAction SilentlyContinue
+    Remove-Item Env:\DEBUG -ErrorAction SilentlyContinue
+    Remove-Item Function:\Set-ProcessSecretFromPrompt -ErrorAction SilentlyContinue
+}
+```
+
+Only treat the reset as successful if the command reports that it reset and verified the
+password. Afterward, verify the new credentials by logging in through the normal admin
+login. Then delete
+`apps/accounts/management/commands/reset_superuser_password_once.py` and its now-empty
+`management` package directories from the source tree, remove the temporary command
+tests, and deploy that removal. Also remove any temporary Render IP allowlist entry and
+close the local PowerShell session to clear its process environment. Never save the
+temporary credentials in Render environment variables or repository files.
+
 Seed sample data only in a local or disposable staging database:
 
 ```bash

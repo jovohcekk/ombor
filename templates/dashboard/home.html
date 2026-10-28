@@ -143,8 +143,9 @@
 {% endblock %}
 {% block extra_js %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+{{ chart_data|json_script:"dashboard-chart-data" }}
 <script>
-  const chartData = {{ chart_json|safe }};
+  const chartData = JSON.parse(document.getElementById("dashboard-chart-data").textContent);
   window.initDashboardCharts(chartData);
 </script>
 {% endblock %}

@@ -260,6 +260,23 @@ class InventoryTestCase(TestCase):
         self.product.refresh_from_db()
         self.assertEqual(self.product.quantity, 0)
 
+    def test_api_staff_cannot_adjust_stock(self):
+        api = APIClient()
+        api.force_authenticate(user=self.staff)
+
+        response = api.post(
+            "/api/stock/adjust/",
+            {"product": self.product.id, "quantity": 0, "unit_price": "10.00"},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, 403)
+        self.product.refresh_from_db()
+        self.assertEqual(self.product.quantity, 10)
+        self.assertFalse(
+            StockMovement.objects.filter(movement_type=MovementType.ADJUSTMENT).exists()
+        )
+
     def test_user_api_enforces_django_password_validators(self):
         api = APIClient()
         api.force_authenticate(user=self.admin)

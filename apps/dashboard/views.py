@@ -49,7 +49,7 @@ def home(request):
         "dashboard/home.html",
         {
             "stats": stats,
-            "chart_json": json.dumps(chart, default=str),
+            "chart_data": chart,
             "recent_movements": recent,
             "low_stock_products": low_stock_products,
         },

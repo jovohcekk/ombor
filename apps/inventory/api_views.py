@@ -2,7 +2,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, viewsets
 from rest_framework.filters import OrderingFilter, SearchFilter
 
-from apps.accounts.permissions import IsStaffOrAbove
+from apps.accounts.permissions import IsManagerOrAbove, IsStaffOrAbove
 from apps.inventory.filters import StockMovementFilter
 from apps.inventory.models import StockMovement
 from apps.inventory.serializers import (
@@ -35,4 +35,4 @@ class StockOutCreateView(generics.CreateAPIView):
 
 class StockAdjustCreateView(generics.CreateAPIView):
     serializer_class = StockAdjustSerializer
-    permission_classes = [IsStaffOrAbove]
+    permission_classes = [IsManagerOrAbove]

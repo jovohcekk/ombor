@@ -68,7 +68,19 @@ def category_rows():
 def build_csv(headers, rows):
     buffer = StringIO()
     writer = csv.writer(buffer)
-    writer.writerow(headers)
+    writer.writerow(_safe_csv_row(headers))
     for row in rows:
-        writer.writerow(row)
+        writer.writerow(_safe_csv_row(row))
     return buffer.getvalue()
+
+
+def _safe_csv_row(row):
+    safe_row = []
+    for value in row:
+        if isinstance(value, str) and (
+            value.startswith(("\t", "\r"))
+            or value.lstrip(" \t\r\n").startswith(("=", "+", "-", "@"))
+        ):
+            value = f"'{value}"
+        safe_row.append(value)
+    return safe_row

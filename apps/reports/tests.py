@@ -3,6 +3,8 @@ from django.test import TestCase
 from django.urls import reverse
 
 from apps.accounts.models import UserRole
+from apps.products.models import Category
+from apps.reports.services import build_csv
 
 User = get_user_model()
 
@@ -46,3 +48,24 @@ class ReportFilterTests(TestCase):
                     "Invalid report filters.",
                     status_code=400,
                 )
+
+    def test_csv_export_escapes_spreadsheet_formula_prefixes(self):
+        Category.objects.create(name="=HYPERLINK(\"https://example.invalid\",\"click\")")
+
+        response = self.client.get(
+            reverse("reports:export_csv"),
+            {"report": "categories"},
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(
+            "'=HYPERLINK(",
+            response.content.decode("utf-8"),
+        )
+
+    def test_csv_builder_preserves_numbers_and_prefixes_formula_like_text(self):
+        output = build_csv(["value"], [["=1+1"], ["  @SUM(1,1)"], [-3]])
+
+        self.assertIn("'=1+1", output)
+        self.assertIn("'  @SUM(1,1)", output)
+        self.assertIn("-3", output)
