@@ -72,6 +72,22 @@ urlpatterns = [
             query_string=True,
         ),
     ),
+    re_path(
+        r"^dashboard/manage/?$",
+        RedirectView.as_view(
+            pattern_name="admin:index",
+            permanent=False,
+            query_string=True,
+        ),
+    ),
+    re_path(
+        r"^admin/?$",
+        RedirectView.as_view(
+            pattern_name="admin:index",
+            permanent=False,
+            query_string=True,
+        ),
+    ),
     path("dashboard/", include("apps.dashboard.urls")),
     path("dashboard/reports/", include("apps.reports.urls")),
     path("manage/", admin.site.urls),
