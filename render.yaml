@@ -22,6 +22,16 @@ services:
         sync: false
       - key: SECURE_SSL_REDIRECT
         value: "True"
+      # Admin account bootstrap: build.sh runs `ensure_superuser`, which creates or
+      # repairs this account. Leave the password empty to get a generated one in the
+      # deploy logs, or set it here to control it.
+      - key: DJANGO_SUPERUSER_USERNAME
+        value: admin
+      - key: DJANGO_SUPERUSER_EMAIL
+        sync: false
+      - key: DJANGO_SUPERUSER_PASSWORD
+        sync: false
+      # SMTP is optional; without it password-reset emails go to the deploy logs.
       - key: EMAIL_HOST
         sync: false
       - key: EMAIL_HOST_USER

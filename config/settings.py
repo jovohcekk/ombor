@@ -188,23 +188,23 @@ REST_FRAMEWORK = {
     },
 }
 
-EMAIL_BACKEND = (
-    "django.core.mail.backends.console.EmailBackend"
-    if DEBUG
-    else "django.core.mail.backends.smtp.EmailBackend"
-)
 EMAIL_HOST = os.environ.get("EMAIL_HOST", "")
 EMAIL_PORT = int(os.environ.get("EMAIL_PORT", "587"))
 EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "")
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "")
 EMAIL_USE_TLS = env_bool("EMAIL_USE_TLS", "False" if DEBUG else "True")
 EMAIL_USE_SSL = env_bool("EMAIL_USE_SSL", "False")
-DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", "")
+DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL") or (
+    "noreply@localhost" if DEBUG else "Ombor <noreply@localhost>"
+)
 
-if not DEBUG and (not EMAIL_HOST or not DEFAULT_FROM_EMAIL):
-    raise ImproperlyConfigured(
-        "EMAIL_HOST and DEFAULT_FROM_EMAIL must be configured when DEBUG is False."
-    )
+# SMTP is optional: without it the app still boots and password-reset emails are
+# written to the platform logs instead of failing the whole deployment.
+EMAIL_BACKEND = (
+    "django.core.mail.backends.smtp.EmailBackend"
+    if EMAIL_HOST
+    else "django.core.mail.backends.console.EmailBackend"
+)
 if EMAIL_USE_TLS and EMAIL_USE_SSL:
     raise ImproperlyConfigured("EMAIL_USE_TLS and EMAIL_USE_SSL cannot both be enabled.")
 

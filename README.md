@@ -69,7 +69,10 @@ See `.env.example`. Never commit `.env`.
 | `CORS_ALLOWED_ORIGINS` | Optional API browser origins |
 | `SECURE_SSL_REDIRECT` | HTTPS redirect when `DEBUG=False` |
 | `TIME_ZONE` | Default `Asia/Tashkent` |
-| `EMAIL_HOST`, `EMAIL_PORT` | SMTP server used for admin password reset |
+| `DJANGO_SUPERUSER_USERNAME` | Admin username created on deploy (default `admin`) |
+| `DJANGO_SUPERUSER_EMAIL` | Optional admin email |
+| `DJANGO_SUPERUSER_PASSWORD` | Admin password applied on deploy; if empty, a generated one is printed in the deploy logs |
+| `EMAIL_HOST`, `EMAIL_PORT` | Optional SMTP server for admin password reset |
 | `EMAIL_HOST_USER`, `EMAIL_HOST_PASSWORD` | Optional SMTP authentication credentials |
 | `EMAIL_USE_TLS`, `EMAIL_USE_SSL` | SMTP transport security; enable only one |
 | `DEFAULT_FROM_EMAIL` | Sender address for password reset messages |
@@ -93,9 +96,26 @@ python manage.py createsuperuser
 ```
 
 The built-in admin is at `/manage/`. Its password reset link uses the configured SMTP
-server. In local development, reset messages are written to the console. Production
-requires `EMAIL_HOST` and `DEFAULT_FROM_EMAIL`; configure SMTP credentials in the
-hosting environment rather than in source control.
+server. In local development, reset messages are written to the console. SMTP is
+optional in production: without `EMAIL_HOST`, reset messages go to the deploy logs and
+the application still starts normally.
+
+### Automatic admin account on deploy
+
+`build.sh` runs `python manage.py ensure_superuser` after migrations. The command is
+idempotent and reads `DJANGO_SUPERUSER_USERNAME`, `DJANGO_SUPERUSER_EMAIL`, and
+`DJANGO_SUPERUSER_PASSWORD` (fallbacks: `ADMIN_USERNAME`, `ADMIN_EMAIL`,
+`ADMIN_PASSWORD`):
+
+- Account missing → it is created as an active Super Admin.
+- Account exists → missing staff/superuser/role flags are repaired and the password is
+  synced to `DJANGO_SUPERUSER_PASSWORD` when it differs.
+- Password variable empty → a random password is generated on first creation and
+  printed once in the deploy logs; an existing password is left unchanged.
+
+While `DJANGO_SUPERUSER_PASSWORD` is set it is the source of truth: change the password
+in the hosting environment, not only in the UI, otherwise the next deploy reverts it.
+If the variable is empty, passwords changed in the UI persist across deploys.
 
 ### One-time production superuser password reset
 
@@ -250,11 +270,16 @@ curl -X POST http://127.0.0.1:8000/api/auth/token/ \
 2. Set `ALLOWED_HOSTS` and `CSRF_TRUSTED_ORIGINS` for the deployed hostname. When
    `RENDER_EXTERNAL_HOSTNAME` is present, settings also add the Render hostname and
    its HTTPS origin automatically.
-3. Configure `EMAIL_HOST` and `DEFAULT_FROM_EMAIL`; add SMTP username/password if
-   required by the provider. Keep credentials in Render environment variables.
-4. `build.sh` installs dependencies, collects static files, and applies pending
-   migrations. Review migration operations before deploying schema changes.
-5. Start command: `gunicorn config.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 60`
+3. Set the admin credentials in Render → Environment:
+   `DJANGO_SUPERUSER_USERNAME` (e.g. `admin`), `DJANGO_SUPERUSER_PASSWORD` (strong), and
+   optionally `DJANGO_SUPERUSER_EMAIL`. The first deploy creates the account. If the
+   password is left empty, the generated one is shown in the deploy logs.
+4. SMTP is optional. To enable admin password-reset emails, set `EMAIL_HOST` and
+   `DEFAULT_FROM_EMAIL` plus credentials; otherwise reset links go to the logs.
+5. `build.sh` installs dependencies, collects static files, applies pending migrations,
+   and runs `ensure_superuser`. Review migration operations before deploying schema
+   changes.
+6. Start command: `gunicorn config.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 60`
 
 If `RENDER_EXTERNAL_HOSTNAME` is present, it is added to `ALLOWED_HOSTS` and CSRF origins automatically.
 
@@ -289,6 +314,8 @@ python manage.py collectstatic --noinput
 | Static files 404 in production | Confirm `collectstatic` ran; WhiteNoise is enabled |
 | CSRF error on Render | Add `https://your-app.onrender.com` to `CSRF_TRUSTED_ORIGINS` |
 | Login fails for a user | Confirm `is_active` and password |
+| Admin login fails in production | Check the deploy log for `Created superuser` / `Updated superuser`; set `DJANGO_SUPERUSER_PASSWORD` in the service environment and redeploy |
+| Render shows application failed to respond | Check deploy logs; missing SMTP no longer blocks startup |
 | Permission denied | Check `role` (super_admin / manager / staff) |
 | Insufficient stock | OUT quantity is greater than on-hand stock |
 | PDF export returns 501 | PDF generation is not implemented; CSV export is available |

@@ -1,28 +1,48 @@
+# Python
 __pycache__/
 *.py[cod]
 *.egg-info/
 .eggs/
-dist/
-build/
 
+# Virtual environments
 env/
 venv/
 .venv/
 
+# Build artifacts
+dist/
+build/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Local databases, logs, settings, and uploads
+*.sqlite3
+*.sqlite3-journal
 *.log
-db.sqlite3
-db.sqlite3-journal
+logs/
+local_settings.py
+local_settings_*.py
 media/
 staticfiles/
-local_settings.py
 
-.env
-.env.local
-.env.*.local
+# Tests and coverage
+.pytest_cache/
+.hypothesis/
+.tox/
+.nox/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+test-results/
 
+# IDE and operating system
 .idea/
 .vscode/
 *.swp
-
 .DS_Store
 Thumbs.db
+Desktop.ini
